@@ -80,6 +80,19 @@
   .tick-in span::after{ content:"★"; color:var(--pink); -webkit-text-stroke:1px var(--ink); margin:0 22px; }
   @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
+  .demo{ padding:100px 0; border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+  .demo .phone{ min-height:560px; }
+  #demo-feed .msg{ animation:msgin .28s ease; }
+  @keyframes msgin{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+  .typing{ display:inline-flex; gap:5px; padding:12px 14px; background:#efefec; border:3px solid var(--ink); border-bottom-left-radius:4px; border-radius:16px 16px 16px 4px; margin-bottom:9px; }
+  .typing i{ width:7px; height:7px; border-radius:50%; background:var(--ink); opacity:.35; animation:blink 1s infinite; }
+  .typing i:nth-child(2){ animation-delay:.18s; } .typing i:nth-child(3){ animation-delay:.36s; }
+  @keyframes blink{ 0%,80%{ opacity:.25; } 40%{ opacity:.9; } }
+  .stampline{ text-align:center; margin:12px 0; }
+  .stampline b{ display:inline-block; border:3px solid var(--ink); padding:8px 16px; font-family:"Archivo Black",sans-serif; font-size:14px; text-transform:uppercase; box-shadow:4px 4px 0 var(--ink); transform:rotate(-2deg); animation:slam .3s cubic-bezier(.2,2,.4,1); }
+  @keyframes slam{ from{ opacity:0; transform:rotate(-2deg) scale(1.7); } to{ opacity:1; transform:rotate(-2deg) scale(1); } }
+  .st-yell{ background:var(--yell); } .st-pink{ background:var(--pink); } .st-lime{ background:var(--lime); }
+  @media (prefers-reduced-motion: reduce){ #demo-feed .msg,.stampline b{ animation:none; } }
   .quote{ padding:110px 0 100px; }
   .quote h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(25px,6vw,56px); line-height:1.04; max-width:900px; overflow-wrap:break-word; }
   .quote h2 .x{ background:var(--pink); box-shadow:0 0 0 3px var(--pink); }
@@ -155,6 +168,7 @@
     .hero{ grid-template-columns:1fr; padding:44px 0 56px; gap:40px; }
     .how-grid,.guard-grid{ grid-template-columns:1fr; }
     .tour{ grid-template-columns:1fr; gap:44px; }
+    .demo{ grid-template-columns:1fr; gap:40px; padding:70px 0; }
     .nav-r a:not(.btn){ display:none; }
     .card-wrap{ transform:none; }
     .badge{ right:2px; top:-16px; font-size:11px; padding:7px 11px; }
@@ -229,6 +243,18 @@
 <div class="ticker"><div class="tick-in">
   <span>No lease, no bill</span><span>$0 until a lease signs</span><span>first reply in under a minute</span><span>273 leads worked month one</span><span>Every step timestamped</span><span>No lease, no bill</span><span>$0 until a lease signs</span><span>first reply in under a minute</span><span>273 leads worked month one</span><span>Every step timestamped</span>
 </div></div>
+
+<section id="demo" class="demo wrap">
+  <div class="rv">
+    <div class="kick">// watch it work</div>
+    <h2 class="sechead">A 9:42pm lead, handled while you <span class="hlm">sleep.</span></h2>
+    <p class="seclead">This is the actual sequence the engine runs on every lead. Watch it fill the unit.</p>
+  </div>
+  <div class="phone rv">
+    <div class="ph-head"><b>Emunah Manor</b>text message</div>
+    <div id="demo-feed"></div>
+  </div>
+</section>
 
 <section class="quote wrap rv">
   <h2>Every other bot charges per door, every month, <span class="x">lease or no lease.</span></h2>
@@ -341,6 +367,45 @@
   if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('on');}); return; }
   var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } }); },{threshold:.1});
   els.forEach(function(e){ io.observe(e); });
+})();
+(function(){
+  var feed=document.getElementById('demo-feed'); if(!feed) return;
+  var S=[
+    {k:'t',x:'TUESDAY 9:42 PM'},
+    {k:'them',x:'Hi, is the 2 bed still available?'},
+    {k:'us',x:'It is! Want to come see it? I can get you in as soon as tomorrow.'},
+    {k:'them',x:'tomorrow at 5 works'},
+    {k:'us',x:'Perfect. Grab your slot here and it is locked in: uprealtybookings.com'},
+    {k:'stamp',x:'Tour booked',c:'st-yell'},
+    {k:'t',x:'WEDNESDAY 9:02 AM'},
+    {k:'us',x:'Reminder your tour is TODAY at 5. Bring a photo ID!'},
+    {k:'t',x:'5:38 PM'},
+    {k:'them',x:'Just toured, loved it!!'},
+    {k:'us',x:'Amazing. The application takes about 10 minutes, here is the link.'},
+    {k:'stamp',x:'Applied',c:'st-pink'},
+    {k:'t',x:'FRIDAY'},
+    {k:'stamp',x:'Lease signed',c:'st-lime'}
+  ];
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(s){
+    var d=document.createElement('div');
+    if(s.k==='t'){ d.className='msg-t'; d.textContent=s.x; }
+    else if(s.k==='stamp'){ d.className='stampline'; var b=document.createElement('b'); b.className=s.c; b.textContent=s.x; d.appendChild(b); }
+    else{ d.className='msg '+(s.k==='us'?'us':'them'); d.textContent=s.x; }
+    return d;
+  }
+  if(reduced){ S.forEach(function(s){ feed.appendChild(el(s)); }); return; }
+  var i=0, typing=null;
+  function typeBubble(){ var t=document.createElement('div'); t.className='typing'; t.innerHTML='<i></i><i></i><i></i>'; feed.appendChild(t); return t; }
+  function step(){
+    if(i>=S.length){ setTimeout(function(){ feed.innerHTML=''; i=0; setTimeout(step,900); },3800); return; }
+    var s=S[i++];
+    if(s.k==='us'){ typing=typeBubble(); setTimeout(function(){ typing.remove(); feed.appendChild(el(s)); setTimeout(step,1150); },950); }
+    else{ feed.appendChild(el(s)); setTimeout(step, s.k==='t'?650:(s.k==='stamp'?1500:1050)); }
+  }
+  var seen=false;
+  var io2=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting&&!seen){ seen=true; setTimeout(step,500); io2.unobserve(feed); } }); },{threshold:.35});
+  io2.observe(feed);
 })();
 </script>
 </body>
