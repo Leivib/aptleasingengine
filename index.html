@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leasing Engine · You pay when the unit fills</title>
+<meta name="description" content="An AI leasing agent you pay only on move-ins. No lease, no bill. Every step timestamped.">
+<meta property="og:title" content="Leasing Engine">
+<meta property="og:description" content="You pay when the unit fills. No lease, no bill.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23C9F73E'/%3E%3Crect x='6' y='6' width='88' height='88' fill='none' stroke='%230F0F0F' stroke-width='7'/%3E%3Ctext x='50' y='72' font-size='58' text-anchor='middle' fill='%230F0F0F' font-family='Arial Black,Arial' font-weight='900'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{ --paper:#FFFCF2; --ink:#0F0F0F; --lime:#C9F73E; --yell:#FFD84D; --pink:#FF90E8; --mut:#565656; }
+  *{ box-sizing:border-box; margin:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:"Space Grotesk",system-ui,sans-serif; background:var(--paper); background-image:radial-gradient(rgba(15,15,15,.055) 1.5px, transparent 1.5px); background-size:26px 26px; color:var(--ink); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .hlm{ background:var(--lime); box-shadow:0 0 0 3px var(--lime); }
+  .kick{ font-family:"IBM Plex Mono",monospace; font-size:13px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:18px; }
+  ::selection{ background:var(--lime); }
+  .wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
+  a{ color:inherit; }
+  .shout{ font-family:"Archivo Black",Arial,sans-serif; text-transform:uppercase; line-height:.96; letter-spacing:-0.01em; }
+  .mono{ font-family:"IBM Plex Mono",monospace; }
+
+  .rv{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; }
+  .rv.on{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .rv{ opacity:1; transform:none; transition:none; } .tick-in{ animation:none !important; } }
+
+  .box{ border:3px solid var(--ink); box-shadow:7px 7px 0 var(--ink); background:#fff; }
+  .press{ transition:transform .12s, box-shadow .12s; }
+  .press:hover{ transform:translate(4px,4px); box-shadow:3px 3px 0 var(--ink); }
+
+  nav{ position:sticky; top:0; background:var(--paper); border-bottom:3px solid var(--ink); z-index:50; }
+  .nav-in{ display:flex; align-items:center; justify-content:space-between; height:66px; }
+  .logo{ font-family:"Archivo Black",sans-serif; font-size:17px; text-transform:uppercase; text-decoration:none; display:flex; align-items:center; gap:10px; }
+  .logo i{ width:28px; height:28px; background:var(--lime); border:3px solid var(--ink); font-style:normal; display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .nav-r{ display:flex; gap:26px; align-items:center; }
+  .nav-r a{ text-decoration:none; font-size:14.5px; font-weight:500; }
+  .nav-r a:not(.btn):hover{ background:var(--yell); }
+  .btn{ display:inline-block; background:var(--ink); color:var(--paper) !important; text-decoration:none; padding:13px 26px; font-weight:700; font-size:15px; border:3px solid var(--ink); box-shadow:5px 5px 0 rgba(15,15,15,.28); transition:transform .12s, box-shadow .12s; }
+  .btn:hover{ transform:translate(3px,3px); box-shadow:1px 1px 0 rgba(15,15,15,.28); }
+  .btn.lime{ background:var(--lime); color:var(--ink) !important; box-shadow:5px 5px 0 var(--ink); }
+  .btn.lime:hover{ box-shadow:1px 1px 0 var(--ink); }
+
+  .hero{ padding:78px 0 70px; display:grid; grid-template-columns:1.08fr .92fr; gap:56px; align-items:center; }
+  .stamp{ display:inline-block; background:var(--pink); border:3px solid var(--ink); padding:6px 14px; font-weight:700; font-size:13.5px; text-transform:uppercase; letter-spacing:.04em; transform:rotate(-2deg); margin-bottom:26px; box-shadow:4px 4px 0 var(--ink); }
+  h1{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(46px,6.6vw,84px); line-height:.98; letter-spacing:-0.01em; }
+  h1 .hl{ background:var(--lime); box-shadow:0 0 0 3px var(--lime); }
+  .hero .sub{ font-size:19px; color:var(--mut); margin:26px 0 32px; max-width:470px; font-weight:500; }
+  .hero .cta{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+
+  .card-wrap{ position:relative; transform:rotate(1.4deg); }
+  .btn .ar{ display:inline-block; margin-left:8px; transition:transform .12s; }
+  .btn:hover .ar{ transform:translateX(5px); }
+  .badge{ position:absolute; top:-20px; right:-12px; z-index:2; background:var(--yell); border:3px solid var(--ink); padding:9px 14px; font-family:"Archivo Black",sans-serif; font-size:13px; text-transform:uppercase; transform:rotate(4deg); box-shadow:4px 4px 0 var(--ink); }
+  .card{ background:#fff; border:3px solid var(--ink); box-shadow:10px 10px 0 var(--ink); }
+  .card .head{ padding:14px 16px; display:flex; align-items:center; gap:12px; border-bottom:3px solid var(--ink); }
+  .avatar{ width:38px; height:38px; background:var(--lime); border:3px solid var(--ink); font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; }
+  .card .head b{ display:block; font-size:15px; }
+  .card .head span{ font-size:12px; color:var(--mut); }
+  .strip{ display:flex; align-items:center; padding:14px 16px; border-bottom:3px solid var(--ink); background:var(--paper); }
+  .dot{ text-align:center; }
+  .dot i{ display:block; width:12px; height:12px; background:var(--ink); margin:0 auto 5px; }
+  .dot b{ font-size:10px; font-weight:700; text-transform:uppercase; }
+  .bar{ height:3px; flex:1; background:var(--ink); margin:0 6px 15px; }
+  .trail{ padding:12px 16px; }
+  .trail div{ display:flex; gap:10px; font-size:13.5px; padding:5px 0; font-weight:500; }
+  .trail i{ width:8px; height:8px; background:var(--lime); border:2px solid var(--ink); margin-top:6px; flex:none; }
+  .trail span{ color:var(--mut); margin-left:auto; white-space:nowrap; font-size:11.5px; font-family:"IBM Plex Mono",monospace; }
+  .comm{ display:flex; justify-content:space-between; align-items:center; background:var(--lime); border-top:3px solid var(--ink); padding:13px 16px; font-size:13.5px; font-weight:700; }
+  .comm b{ font-family:"Archivo Black",sans-serif; font-size:19px; }
+
+  .ticker{ border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); background:var(--lime); color:var(--ink); overflow:hidden; }
+  .tick-in{ display:flex; width:max-content; animation:tick 26s linear infinite; }
+  .tick-in span{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:15px; padding:13px 0; white-space:nowrap; }
+  .tick-in span::after{ content:"★"; color:var(--pink); -webkit-text-stroke:1px var(--ink); margin:0 22px; }
+  @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  .quote{ padding:110px 0 100px; }
+  .quote h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(30px,4.6vw,56px); line-height:1.04; max-width:900px; }
+  .quote h2 .x{ background:var(--pink); box-shadow:0 0 0 3px var(--pink); }
+  .quote p{ font-size:19px; color:var(--mut); max-width:640px; margin-top:26px; font-weight:500; }
+
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; padding-bottom:110px; }
+  .stat{ border:3px solid var(--ink); padding:26px 22px; box-shadow:7px 7px 0 var(--ink); }
+  .stat b{ font-family:"Archivo Black",sans-serif; font-size:40px; display:block; line-height:1; margin-bottom:8px; }
+  .stat span{ font-size:14px; font-weight:500; }
+  .stat:nth-child(1){ background:var(--lime); }
+  .stat:nth-child(2){ background:#fff; }
+  .stat:nth-child(3){ background:var(--yell); }
+  .stat:nth-child(4){ background:#fff; }
+  .stats-kick{ font-family:"IBM Plex Mono",monospace; font-size:13px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:20px; }
+
+  .sechead{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(28px,4vw,46px); line-height:1.02; }
+  .seclead{ font-size:18px; color:var(--mut); margin-top:16px; max-width:560px; font-weight:500; }
+
+  .how{ padding-bottom:110px; }
+  .how-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; margin-top:44px; }
+  .step{ border:3px solid var(--ink); background:#fff; padding:26px; box-shadow:7px 7px 0 var(--ink); position:relative; }
+  .step .k{ font-family:"Archivo Black",sans-serif; font-size:44px; color:var(--paper); -webkit-text-stroke:2px var(--ink); position:absolute; top:14px; right:18px; }
+  .step b{ display:block; font-size:19px; margin-bottom:8px; font-weight:700; }
+  .step p{ font-size:15px; color:var(--mut); max-width:88%; }
+
+  .tour-sec{ padding:100px 0 110px; border-top:3px solid var(--ink); background:#fff; }
+  .tour{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+  .tour ul{ list-style:none; padding:0; margin-top:30px; }
+  .tour li{ font-size:16.5px; padding:12px 0; border-bottom:3px solid var(--ink); font-weight:500; display:flex; gap:12px; }
+  .tour li::before{ content:"→"; font-weight:700; }
+  .tour li:last-child{ border:none; }
+  .tour li span{ color:var(--mut); font-weight:400; }
+  .phone{ width:330px; margin:0 auto; background:var(--paper); border:3px solid var(--ink); box-shadow:10px 10px 0 var(--ink); padding:16px 14px 20px; }
+  .phone .ph-head{ text-align:center; font-size:12px; color:var(--mut); padding-bottom:12px; border-bottom:3px solid var(--ink); margin-bottom:12px; font-family:"IBM Plex Mono",monospace; }
+  .phone .ph-head b{ display:block; color:var(--ink); font-size:14px; font-family:"Space Grotesk",sans-serif; }
+  .msg{ max-width:86%; padding:10px 13px; font-size:13.5px; line-height:1.45; margin-bottom:9px; border:3px solid var(--ink); font-weight:500; }
+  .msg.us{ background:var(--lime); margin-left:auto; box-shadow:4px 4px 0 var(--ink); }
+  .msg.them{ background:#fff; box-shadow:-4px 4px 0 var(--ink); }
+  .msg-t{ text-align:center; font-size:10.5px; color:var(--mut); margin:10px 0 6px; font-family:"IBM Plex Mono",monospace; }
+
+  .guard{ padding:100px 0 110px; border-top:3px solid var(--ink); }
+  .guard-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; margin-top:44px; }
+  .g-item{ border:3px solid var(--ink); background:#fff; padding:24px 26px; box-shadow:7px 7px 0 var(--pink); }
+  .g-item b{ display:block; font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:16px; margin-bottom:10px; }
+  .g-item b::before{ content:""; display:inline-block; width:12px; height:12px; background:var(--lime); border:2px solid var(--ink); margin-right:10px; }
+  .g-item p{ font-size:15px; color:var(--mut); }
+
+  .band{ background:var(--yell); border-bottom:3px solid var(--ink); padding:96px 24px; text-align:center; }
+  .band h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(28px,4.4vw,50px); line-height:1.02; margin-bottom:20px; }
+  .band p{ font-size:18px; max-width:620px; margin:0 auto; font-weight:500; }
+  .band .ops{ display:inline-block; margin-top:30px; background:#fff; border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink); padding:10px 18px; font-weight:700; font-size:14.5px; transform:rotate(-1.5deg); }
+
+  .faq{ padding:100px 0 110px; max-width:760px; margin:0 auto; }
+  .faq .sechead{ margin-bottom:36px; }
+  details{ border:3px solid var(--ink); background:#fff; margin-bottom:14px; box-shadow:6px 6px 0 var(--ink); }
+  summary{ font-weight:700; font-size:17px; cursor:pointer; list-style:none; display:flex; justify-content:space-between; gap:16px; padding:17px 20px; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:"+"; font-family:"Archivo Black",sans-serif; }
+  details[open] summary::after{ content:"–"; }
+  details[open] summary{ border-bottom:3px solid var(--ink); background:var(--lime); }
+  details p{ padding:16px 20px; font-size:15.5px; color:var(--mut); font-weight:500; }
+
+  .final{ background:var(--lime); border-top:3px solid var(--ink); text-align:center; padding:110px 24px 96px; }
+  .final h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(38px,6vw,72px); line-height:.98; margin-bottom:20px; }
+  .final p{ font-size:18px; max-width:520px; margin:0 auto 38px; font-weight:500; }
+  .final .fine{ margin-top:24px; font-size:13.5px; font-family:"IBM Plex Mono",monospace; }
+
+  footer{ border-top:3px solid var(--ink); background:var(--paper); overflow:hidden; }
+  .foot-shout{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(52px,9.6vw,124px); line-height:.95; letter-spacing:-0.01em; color:transparent; -webkit-text-stroke:2px var(--ink); white-space:nowrap; padding-top:34px; }
+  .foot-in{ padding:22px 0 26px; display:flex; justify-content:space-between; font-size:14px; font-weight:500; flex-wrap:wrap; gap:10px; }
+
+  @media (max-width:900px){
+    .hero{ grid-template-columns:1fr; padding-top:48px; gap:52px; }
+    .stats{ grid-template-columns:1fr 1fr; }
+    .how-grid,.guard-grid{ grid-template-columns:1fr; }
+    .tour{ grid-template-columns:1fr; gap:48px; }
+    .nav-r a:not(.btn){ display:none; }
+    .badge{ right:4px; }
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="logo" href="#"><i>L</i>Leasing Engine</a>
+  <div class="nav-r">
+    <a href="#how">How it works</a>
+    <a href="#tour">The tour engine</a>
+    <a href="#faq">FAQ</a>
+    <a class="btn" href="https://calendar.app.google/HFP1ATrVBL22U2gFA" target="_blank" rel="noopener">Get a demo</a>
+  </div>
+</div></nav>
+
+<header class="wrap hero">
+  <div>
+    <div class="stamp">No lease, no bill</div>
+    <h1>You pay when the unit <span class="hl">fills.</span></h1>
+    <p class="sub">An AI leasing agent working every lead from first text to signed lease. You get billed when someone moves in, with a timestamped receipt.</p>
+    <div class="cta">
+      <a class="btn lime" href="https://calendar.app.google/HFP1ATrVBL22U2gFA" target="_blank" rel="noopener">Get a demo<span class="ar">→</span></a>
+      <a class="btn" href="#tour">See how it works<span class="ar">→</span></a>
+    </div>
+  </div>
+  <div class="card-wrap">
+    <div class="badge">Billed off this card</div>
+    <div class="card">
+      <div class="head"><div class="avatar">MR</div><div><b>Maya R.</b><span>Guest card</span></div></div>
+      <div class="strip">
+        <div class="dot"><i></i><b>Came in</b></div><div class="bar"></div>
+        <div class="dot"><i></i><b>Toured</b></div><div class="bar"></div>
+        <div class="dot"><i></i><b>Applied</b></div><div class="bar"></div>
+        <div class="dot"><i></i><b>Leased</b></div>
+      </div>
+      <div class="trail">
+        <div><i></i>Lead came in, we texted in 1 min<span>Jun 22 18:47</span></div>
+        <div><i></i>Tour booked and confirmed<span>Jun 26 09:02</span></div>
+        <div><i></i>Showed up and toured<span>Jun 26 11:08</span></div>
+        <div><i></i>Applied<span>Jun 27 15:15</span></div>
+        <div><i></i>Lease signed<span>Jul 01 12:30</span></div>
+      </div>
+      <div class="comm"><span>Move-in confirmed. Commission owed</span><b>$849.50</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="ticker"><div class="tick-in">
+  <span>No lease, no bill</span><span>$0 until a lease signs</span><span>first reply in under a minute</span><span>273 leads worked month one</span><span>Every step timestamped</span><span>No lease, no bill</span><span>$0 until a lease signs</span><span>first reply in under a minute</span><span>273 leads worked month one</span><span>Every step timestamped</span>
+</div></div>
+
+<section class="quote wrap rv">
+  <h2>Every other bot charges per door, every month, <span class="x">lease or no lease.</span></h2>
+  <p>We charge a commission when a lead we worked signs. And we bill against a timestamped card, not a message-count report.</p>
+</section>
+
+<div class="wrap rv">
+  <div class="stats-kick">// First month, one building</div>
+  <div class="stats">
+    <div class="stat press"><b>273</b><span>leads worked</span></div>
+    <div class="stat press"><b>760+</b><span>messages sent by the AI</span></div>
+    <div class="stat press"><b>13</b><span>move-ins placed</span></div>
+    <div class="stat press"><b>&lt;1 min</b><span>first reply, natural cadence</span></div>
+  </div>
+</div>
+
+<section id="how" class="how wrap">
+  <div class="rv">
+    <div class="kick">// the funnel</div>
+    <h2 class="sechead">From inquiry to keys</h2>
+    <p class="seclead">The whole funnel, worked by one engine, with a stamp on every step.</p>
+  </div>
+  <div class="how-grid rv">
+    <div class="step press"><span class="k">01</span><b>Catches every lead</b><p>Zillow, Apartments.com, and your ILS platform. First reply within a minute, even at 9pm on a Saturday.</p></div>
+    <div class="step press"><span class="k">02</span><b>Talks like a person</b><p>Answers from your building's facts. Never repeats itself, and honest when asked if it is a bot.</p></div>
+    <div class="step press"><span class="k">03</span><b>Works every tour</b><p>Books on your calendar, then reminds, confirms, and follows up based on who actually showed.</p></div>
+    <div class="step press"><span class="k">04</span><b>Proves every move-in</b><p>A guest card per lead with the real conversation and a trail ending in "lease signed."</p></div>
+  </div>
+</section>
+
+<section id="tour" class="tour-sec">
+  <div class="wrap tour">
+  <div class="rv">
+    <div class="kick">// the tour engine</div>
+    <h2 class="sechead">A booked tour is worth nothing if nobody shows.</h2>
+    <p class="seclead">Seven automatic touches around every tour. Each fires once, stays inside legal texting hours, and stops the moment they reply or apply.</p>
+    <ul>
+      <li>Day-before and morning-of reminders</li>
+      <li>Arrival directions an hour out</li>
+      <li>"How did it go" <span>only if they actually toured</span></li>
+      <li>No-shows get a rebook nudge <span>instead of a guilt trip</span></li>
+      <li>Gentle check-ins until they apply <span>then it goes quiet</span></li>
+    </ul>
+  </div>
+  <div class="phone rv">
+    <div class="ph-head"><b>Emunah Manor</b>text message</div>
+    <div class="msg-t">TUE 9:02 AM</div>
+    <div class="msg us">Hi Maya, your tour is TODAY at 11. See you then, bring a photo ID!</div>
+    <div class="msg-t">10:04 AM</div>
+    <div class="msg us">When you arrive, park in visitor parking and head to the leasing office.</div>
+    <div class="msg-t">1:15 PM</div>
+    <div class="msg them">Just toured, loved it!!</div>
+    <div class="msg us">Amazing. I can get your application started right now, takes about 10 minutes.</div>
+  </div>
+  </div>
+</section>
+
+<section class="guard">
+  <div class="wrap">
+    <div class="rv">
+      <div class="kick">// the rules</div>
+      <h2 class="sechead">Boring on purpose, <span class="hlm">where it counts.</span></h2>
+      <p class="seclead">The rules the engine will not break, in writing.</p>
+    </div>
+    <div class="guard-grid rv">
+      <div class="g-item"><b>It never invents</b><p>No promised callbacks, no made-up confirmations, no quoted rent you did not approve. When it cannot answer, it hands off to a person with the whole conversation attached.</p></div>
+      <div class="g-item"><b>It texts legally</b><p>Consent recorded, STOP and HELP honored on every thread, first message carries an opt-out, and sends stay inside a Monday to Saturday, 9 to 5 window.</p></div>
+      <div class="g-item"><b>Your data is walled off</b><p>Each building's data is isolated, and the isolation is verified by automated tests on every change.</p></div>
+      <div class="g-item"><b>Nothing gets lost</b><p>Every conversation and every stamp is backed up nightly, off-site. The proof survives anything.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band rv">
+  <h2>Done with you, not dumped on you.</h2>
+  <p>A real account manager sets the engine up on your facts, then stays in it: a weekly call or a shared WhatsApp group, whichever fits how you work.</p>
+  <div class="ops">★ Built by a team that leases its own buildings</div>
+</section>
+
+<section id="faq" class="faq">
+  <div class="kick">// straight answers</div>
+  <h2 class="sechead" style="margin-bottom:36px">No fine print</h2>
+  <details><summary>What does it cost?</summary><p>A commission per move-in, agreed up front. No per-door fee and no monthly minimum. If we do not fill units, you do not pay.</p></details>
+  <details><summary>What channels does it use?</summary><p>Text first, because that is what renters answer. Email as well, including replies inside the renter's Zillow thread. Voice is on the roadmap.</p></details>
+  <details><summary>Which lead sources does it catch?</summary><p>Zillow, Apartments.com, and whatever ILS you list on. New sources take about a day to add.</p></details>
+  <details><summary>What about my data?</summary><p>Each building's data is isolated, verified by automated tests, and backed up nightly off-site.</p></details>
+  <details><summary>How long does onboarding take?</summary><p>A day or two. One kickoff call with your team and we are live. Your second building goes even faster.</p></details>
+  <details><summary>Does it replace my onsite team?</summary><p>No. It runs the lead queue and the tour calendar so your team can run the building. Anything needing judgment goes to a person, with the whole conversation attached.</p></details>
+</section>
+
+<div class="final">
+  <div class="stamp" style="background:#fff">15 minutes flat</div>
+  <h2>See a live guest card.</h2>
+  <p>Fifteen minutes. The actual dashboard, the actual conversations, the actual move-ins.</p>
+  <a class="btn" href="https://calendar.app.google/HFP1ATrVBL22U2gFA" target="_blank" rel="noopener">Get a demo<span class="ar">→</span></a>
+  <div class="fine">// live in a day or two. your second building goes even faster.</div>
+</div>
+
+<footer>
+  <div class="wrap"><div class="foot-shout">Leasing Engine</div></div>
+  <div class="wrap foot-in">
+    <div>© Leasing Engine</div>
+    <div><a href="https://calendar.app.google/HFP1ATrVBL22U2gFA" target="_blank" rel="noopener">Book a demo</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('on');}); return; }
+  var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } }); },{threshold:.1});
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+</body>
+</html>
