@@ -369,7 +369,7 @@
   </div>
   <div class="how-grid rv">
     <div class="step press"><span class="k">01</span><b>Catches every lead</b><p>Zillow, Apartments.com, and your ILS platform. First reply within a minute, even at 9pm on a Saturday.</p></div>
-    <div class="step press"><span class="k">02</span><b>Talks like a person</b><p>By text and email, even replying inside the Zillow thread. Every answer comes from your building's facts, and it is honest when asked if it is a bot.</p></div>
+    <div class="step press"><span class="k">02</span><b>Talks like a person</b><p>By text and email, even inside the Zillow thread, in whatever language the lead writes. Every answer comes from your building's facts, and it is honest when asked if it is a bot.</p></div>
     <div class="step press"><span class="k">03</span><b>Works every tour</b><p>Books on your calendar and sends every reminder. What happens after depends on who actually showed.</p></div>
     <div class="step press"><span class="k">04</span><b>Proves every move-in</b><p>A guest card per lead with the real conversation and a trail ending in "lease signed."</p></div>
   </div>
@@ -419,7 +419,7 @@
   <div class="kick">// straight answers</div>
   <h2 class="sechead" style="margin-bottom:36px">No fine print</h2>
   <details><summary>What does it cost?</summary><p>A commission per move-in, agreed up front. There is no per-door fee or monthly minimum. If we do not fill units, you do not pay.</p></details>
-  <details><summary>What channels does it use?</summary><p>Both text and email. Text carries most conversations because that is what renters answer, and email replies land inside the renter's Zillow thread. Voice is on the roadmap.</p></details>
+  <details><summary>What channels does it use?</summary><p>Both text and email. Text carries most conversations because that is what renters answer, and email replies land inside the renter's Zillow thread. It replies in the lead's language, Spanish included. Voice is on the roadmap.</p></details>
   <details><summary>Does it work with my property management software?</summary><p>Any PMS, from day one: point your listing-site lead emails at us, hand us a CSV, or push leads through our API. Native two-way syncs are rolling out starting with Rent Manager, the one the big platforms skip.</p></details>
   <details><summary>Which lead sources does it catch?</summary><p>Zillow, Apartments.com, and whatever ILS you list on. New sources take about a day to add.</p></details>
   <details><summary>What about my data?</summary><p>Each building's data is isolated, verified by automated tests, and backed up nightly off-site.</p></details>
@@ -456,24 +456,26 @@
     {k:'t',x:'TUESDAY 9:42 PM'},
     {k:'them',x:'Hi, is the 2 bed still available?'},
     {k:'us',x:'It is! When are you hoping to move, and what monthly budget are you working with?'},
-    {k:'them',x:'sept 1, around $1,700. also is this a real person lol'},
-    {k:'us',x:'I am the AI leasing assistant here at Emunah Manor, and I can really get you moved in. The 2 bed is $1,699, so Sept 1 at your budget works.'},
-    {k:'them',x:'ok nice. can i see it first?'},
-    {k:'us',h:'Of course. Here is a video walkthrough of that exact unit: <u style="font-weight:700">Watch the video tour →</u>'},
-    {k:'them',x:'just watched, love the kitchen. can I come tomorrow at 5?'},
-    {k:'us',h:'Tomorrow at 5 is open. Lock it in here: <u style="font-weight:700">Book your tour →</u>'},
+    {k:'them',x:'Buenas, la verdad prefiero español. Para septiembre, como $1,700?'},
+    {k:'us',x:'Perfecto, seguimos en español. El de 2 habitaciones es $1,699, así que septiembre con tu presupuesto funciona.'},
+    {k:'them',x:'es una persona real? jaja'},
+    {k:'us',x:'Soy el asistente de IA de Emunah Manor, y de verdad puedo conseguirte el apartamento. Te mando un video de esa misma unidad?'},
+    {k:'them',x:'dale'},
+    {k:'us',h:'Aquí tienes el recorrido en video: <u style="font-weight:700">Ver el video →</u>'},
+    {k:'them',x:'me encantó la cocina. puedo ir mañana a las 5?'},
+    {k:'us',h:'Mañana a las 5 está libre. Resérvalo aquí: <u style="font-weight:700">Reserva tu visita →</u>'},
     {k:'stamp',x:'Tour booked',c:'st-yell'},
     {k:'t',x:'WEDNESDAY 9:02 AM'},
-    {k:'us',x:'Reminder your tour is TODAY at 5. Bring a photo ID!'},
+    {k:'us',x:'Recordatorio: tu visita es HOY a las 5. Trae una identificación con foto!'},
     {k:'t',x:'5:38 PM'},
-    {k:'them',x:'Just toured, loved it!!'},
-    {k:'us',h:'Amazing. The application takes about 10 minutes: <u style="font-weight:700">Apply now →</u>'},
+    {k:'them',x:'Me encantó!!'},
+    {k:'us',h:'Genial. La solicitud toma unos 10 minutos: <u style="font-weight:700">Aplica aquí →</u>'},
     {k:'stamp',x:'Applied',c:'st-pink'},
     {k:'t',x:'THURSDAY 11:20 AM'},
-    {k:'us',x:'Good news, you are approved! Sending the lease over now.'},
-    {k:'them',x:'Just signed!!'},
+    {k:'us',x:'Buenas noticias, estás aprobado! Te mando el contrato ahora.'},
+    {k:'them',x:'Firmado!!'},
     {k:'stamp',x:'Lease signed',c:'st-lime'},
-    {k:'us',x:'Welcome home, Maya. Keys are ready Saturday at 10.'},
+    {k:'us',x:'Bienvenido a casa. Las llaves están listas el sábado a las 10.'},
     {k:'t',x:'// EVERY STEP ABOVE IS TIMESTAMPED ON YOUR GUEST CARD'},
     {k:'stamp',x:'Billed off the card',c:'st-lime'}
   ];
