@@ -80,6 +80,7 @@
   .tick-in span::after{ content:"★"; color:var(--ink); margin:0 22px; }
   @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
+  .hero-phone{ width:330px; margin:0 auto; min-height:540px; }
   .demo{ padding:100px 24px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
   .demo .phone{ min-height:560px; }
   #demo-feed .msg{ animation:msgin .28s ease; }
@@ -244,6 +245,7 @@
     .foot-shout{ font-size:18.5vw; -webkit-text-stroke:1.5px var(--ink); padding-top:20px; white-space:normal; text-align:center; line-height:.92; }
     .foot-in{ flex-direction:column; align-items:center; text-align:center; font-size:12px; }
     .demo{ grid-template-columns:1fr; gap:30px; padding-left:22px; padding-right:22px; }
+    .hero-phone{ width:100%; min-height:400px; }
     .demo .phone{ min-height:340px; }
   }
   </style>
@@ -271,7 +273,22 @@
       <a class="btn" href="#tour">See how it works<span class="ar">→</span></a>
     </div>
   </div>
-  <div class="card-wrap">
+  <div class="phone hero-phone">
+    <div class="ph-head"><b>Emunah Manor</b>text message</div>
+    <div id="demo-feed"></div>
+  </div>
+</header>
+
+
+
+<section id="demo" class="demo wrap">
+  <div class="rv">
+    <div class="kick">// the receipt</div>
+    <h2 class="sechead">Every lead becomes a <span class="hlm">guest card.</span></h2>
+    <p class="seclead">The full trail with a timestamp on every step, ending in a signed lease. When we bill you, this card is the invoice.</p>
+  </div>
+  <div class="card-wrap rv">
+  
     <div class="badge">Billed off this card</div>
     <div class="card">
       <div class="head"><div class="avatar">MR</div><div><b>Maya R.</b><span>Guest card</span></div></div>
@@ -290,20 +307,7 @@
       </div>
       <div class="comm"><span>Move-in confirmed</span><b>Leased ✓</b></div>
     </div>
-  </div>
-</header>
-
-
-
-<section id="demo" class="demo wrap">
-  <div class="rv">
-    <div class="kick">// watch it work</div>
-    <h2 class="sechead">A 9:42pm lead, handled while you <span class="hlm">sleep.</span></h2>
-    <p class="seclead">This is the actual sequence the engine runs on every lead. Watch it fill the unit.</p>
-  </div>
-  <div class="phone rv">
-    <div class="ph-head"><b>Emunah Manor</b>text message</div>
-    <div id="demo-feed"></div>
+  
   </div>
 </section>
 
