@@ -17,7 +17,7 @@
   *{ box-sizing:border-box; margin:0; min-width:0; }
   html{ scroll-behavior:smooth; overflow-x:hidden; }
   img,svg,table{ max-width:100%; }
-  body{ font-family:"Space Grotesk",system-ui,sans-serif; background:var(--paper); background-image:radial-gradient(rgba(15,15,15,.055) 1.5px, transparent 1.5px); background-size:26px 26px; color:var(--ink); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  body{ font-family:"Space Grotesk",system-ui,sans-serif; background:var(--paper); background-image:radial-gradient(rgba(15,15,15,.03) 1.5px, transparent 1.5px); background-size:30px 30px; color:var(--ink); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   .hlm{ background:var(--lime); box-shadow:0 0 0 3px var(--lime); }
   .kick{ font-family:"IBM Plex Mono",monospace; font-size:13px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:18px; }
   ::selection{ background:var(--lime); }
@@ -53,10 +53,10 @@
   .hero .sub{ font-size:19px; color:var(--mut); margin:26px 0 32px; max-width:470px; font-weight:500; }
   .hero .cta{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
 
-  .card-wrap{ position:relative; transform:rotate(1.4deg); }
+  .card-wrap{ position:relative; }
   .btn .ar{ display:inline-block; margin-left:8px; transition:transform .12s; }
   .btn:hover .ar{ transform:translateX(5px); }
-  .badge{ position:absolute; top:-20px; right:-12px; z-index:2; background:var(--yell); border:3px solid var(--ink); padding:9px 14px; font-family:"Archivo Black",sans-serif; font-size:13px; text-transform:uppercase; transform:rotate(4deg); box-shadow:4px 4px 0 var(--ink); }
+  .badge{ position:absolute; top:-20px; right:-12px; z-index:2; background:var(--yell); border:3px solid var(--ink); padding:9px 14px; font-family:"Archivo Black",sans-serif; font-size:13px; text-transform:uppercase;  box-shadow:3px 3px 0 var(--ink); }
   .card{ background:#fff; border:3px solid var(--ink); box-shadow:10px 10px 0 var(--ink); }
   .card .head{ padding:14px 16px; display:flex; align-items:center; gap:12px; border-bottom:3px solid var(--ink); }
   .avatar{ width:38px; height:38px; background:var(--lime); border:3px solid var(--ink); font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; }
@@ -75,9 +75,9 @@
   .comm b{ font-family:"Archivo Black",sans-serif; font-size:19px; }
 
   .ticker{ border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); background:var(--lime); color:var(--ink); overflow:hidden; }
-  .tick-in{ display:flex; width:max-content; animation:tick 26s linear infinite; }
+  .tick-in{ display:flex; width:max-content; animation:tick 34s linear infinite; }
   .tick-in span{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:15px; padding:13px 0; white-space:nowrap; }
-  .tick-in span::after{ content:"★"; color:var(--pink); -webkit-text-stroke:1px var(--ink); margin:0 22px; }
+  .tick-in span::after{ content:"★"; color:var(--ink); margin:0 22px; }
   @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
   .demo{ padding:100px 24px; border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
@@ -261,9 +261,9 @@
 
 <header class="wrap hero">
   <div>
-    <div class="stamp">No lease, no bill</div>
+    <div class="kick" style="margin-bottom:16px">The AI leasing agent for apartment owners</div>
     <h1>You pay when the unit <span class="hl">fills.</span></h1>
-    <p class="sub">An AI leasing agent working every lead from first text to signed lease. You get billed when someone moves in, with a timestamped receipt.</p>
+    <p class="sub">It answers every rental lead by text in under a minute, books and works the tours, and follows through to a signed lease. You pay a commission only when a unit fills. No lease, no bill.</p>
     <div class="cta">
       <a class="btn lime" href="https://calendar.app.google/HFP1ATrVBL22U2gFA" target="_blank" rel="noopener">Get a demo<span class="ar">→</span></a>
       <a class="btn" href="#tour">See how it works<span class="ar">→</span></a>
