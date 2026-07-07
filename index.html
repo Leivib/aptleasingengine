@@ -82,7 +82,7 @@
   @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
   .hero-phone{ width:330px; margin:0 auto; height:560px; display:flex; flex-direction:column; overflow:hidden; }
-  .hero-phone #demo-feed{ flex:1 1 auto; min-height:0; overflow-y:auto; scrollbar-width:none; overflow-anchor:none; }
+  .hero-phone #demo-feed{ flex:1 1 auto; min-height:0; overflow:hidden; overflow-anchor:none; }
   .hero-phone #demo-feed::-webkit-scrollbar{ display:none; }
   .demo{ padding:100px 24px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
   .demo .phone{ min-height:560px; }
@@ -281,7 +281,7 @@
     <div class="stamp">No lease, no bill</div>
     <div class="kick" style="margin-bottom:16px">The AI leasing agent built by actual leasing agents</div>
     <h1>Meet your new <span class="hl">leasing agent.</span></h1>
-    <p class="sub">The first AI leasing agent that wants your units filled as badly as you do. It answers every lead in under a minute, by text and email, even inside the Zillow thread, then works it all the way to a signed lease.</p>
+    <p class="sub">The first AI leasing agent that wants your units filled as badly as you do. It answers every lead in under a minute, by text and email, in any language, even inside the Zillow thread, then works it all the way to a signed lease.</p>
     <p class="conf">And we are so confident it fills units: <span class="hlm">you only pay when one does.</span></p>
     <div class="cta">
       <a class="btn lime" href="https://calendar.app.google/HFP1ATrVBL22U2gFA" target="_blank" rel="noopener">Get a demo<span class="ar">→</span></a>
@@ -492,10 +492,10 @@
   function put(n){ feed.appendChild(n); feed.scrollTop=feed.scrollHeight; }
   function typeBubble(){ var t=document.createElement('div'); t.className='typing'; t.innerHTML='<i></i><i></i><i></i>'; put(t); return t; }
   function step(){
-    if(i>=S.length){ setTimeout(function(){ feed.innerHTML=''; i=0; setTimeout(step,900); },3800); return; }
+    if(i>=S.length){ setTimeout(function(){ feed.innerHTML=''; i=0; setTimeout(step,1000); },5600); return; }
     var s=S[i++];
-    if(s.k==='us'){ typing=typeBubble(); setTimeout(function(){ typing.remove(); put(el(s)); setTimeout(step,1150); },950); }
-    else{ put(el(s)); setTimeout(step, s.k==='t'?650:(s.k==='stamp'?1500:1050)); }
+    if(s.k==='us'){ typing=typeBubble(); setTimeout(function(){ typing.remove(); put(el(s)); setTimeout(step,1750); },1250); }
+    else{ put(el(s)); setTimeout(step, s.k==='t'?900:(s.k==='stamp'?2100:1600)); }
   }
   var seen=false;
   var io2=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting&&!seen){ seen=true; setTimeout(step,500); io2.unobserve(feed); } }); },{threshold:.35});
