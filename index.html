@@ -80,7 +80,7 @@
   .tick-in span::after{ content:"★"; color:var(--ink); margin:0 22px; }
   @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
-  .demo{ padding:100px 24px; border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+  .demo{ padding:100px 24px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
   .demo .phone{ min-height:560px; }
   #demo-feed .msg{ animation:msgin .28s ease; }
   @keyframes msgin{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
@@ -119,7 +119,7 @@
   .step p{ font-size:15px; color:var(--mut); max-width:88%; }
 
   .tour-sec{ padding:100px 0 110px; border-top:3px solid var(--ink); background:#fff; }
-  .tour{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+  .tour{ display:block; max-width:720px; }
   .tour ul{ list-style:none; padding:0; margin-top:30px; }
   .tour li{ font-size:16.5px; padding:12px 0; border-bottom:3px solid var(--ink); font-weight:500; display:flex; gap:12px; }
   .tour li::before{ content:"→"; font-weight:700; }
@@ -262,6 +262,7 @@
 
 <header class="wrap hero">
   <div>
+    <div class="stamp">No lease, no bill</div>
     <div class="kick" style="margin-bottom:16px">The AI leasing agent for apartment owners</div>
     <h1>You pay when the unit <span class="hl">fills.</span></h1>
     <p class="sub">It answers every rental lead by text in under a minute, books and works the tours, and follows through to a signed lease. You pay a commission only when a unit fills. No lease, no bill.</p>
@@ -292,9 +293,7 @@
   </div>
 </header>
 
-<div class="ticker"><div class="tick-in">
-  <span>No lease, no bill</span><span>$0 until a lease signs</span><span>first reply in under a minute</span><span>273 leads worked month one</span><span>Every step timestamped</span><span>No lease, no bill</span><span>$0 until a lease signs</span><span>first reply in under a minute</span><span>273 leads worked month one</span><span>Every step timestamped</span>
-</div></div>
+
 
 <section id="demo" class="demo wrap">
   <div class="rv">
@@ -351,17 +350,7 @@
       <li>Gentle check-ins until they apply <span>then it goes quiet</span></li>
     </ul>
   </div>
-  <div class="phone rv">
-    <div class="ph-head"><b>Emunah Manor</b>text message</div>
-    <div class="msg-t">TUE 9:02 AM</div>
-    <div class="msg us">Hi Maya, your tour is TODAY at 11. See you then, bring a photo ID!</div>
-    <div class="msg-t">10:04 AM</div>
-    <div class="msg us">When you arrive, park in visitor parking and head to the leasing office.</div>
-    <div class="msg-t">1:15 PM</div>
-    <div class="msg them">Just toured, loved it!!</div>
-    <div class="msg us">Amazing. I can get your application started right now, takes about 10 minutes.</div>
-  </div>
-  </div>
+    </div>
 </section>
 
 <section class="guard">
