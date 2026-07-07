@@ -82,7 +82,7 @@
   @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
   .hero-phone{ width:330px; margin:0 auto; height:560px; display:flex; flex-direction:column; overflow:hidden; }
-  .hero-phone #demo-feed{ flex:1 1 auto; min-height:0; overflow-y:auto; scrollbar-width:none; overflow-anchor:none; }
+  .hero-phone #demo-feed{ flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; overflow-anchor:none; }
   .hero-phone #demo-feed::-webkit-scrollbar{ display:none; }
   .demo{ padding:100px 24px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
   .demo .phone{ min-height:560px; }
