@@ -96,6 +96,16 @@
   .st-yell{ background:var(--yell); } .st-pink{ background:var(--pink); } .st-lime{ background:var(--lime); }
   @media (prefers-reduced-motion: reduce){ #demo-feed .msg,.stampline b{ animation:none; } }
   .quote{ padding:110px 24px 100px; }
+  .vs-sec{ padding-bottom:110px; }
+  .vs{ margin-top:40px; border:3px solid var(--ink); background:#fff; box-shadow:7px 7px 0 var(--ink); }
+  .vs-head{ display:grid; grid-template-columns:1fr 1fr; border-bottom:3px solid var(--ink); }
+  .vs-head div{ padding:13px 16px; font-family:"Archivo Black",Arial,sans-serif; text-transform:uppercase; font-size:14px; }
+  .vs-head div:first-child{ background:var(--lime); border-right:3px solid var(--ink); }
+  .vs-label{ padding:9px 16px 3px; font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:#666; border-top:2px solid var(--ink); }
+  .vs-row{ display:grid; grid-template-columns:1fr 1fr; }
+  .vs-row div{ padding:6px 16px 14px; font-size:14.5px; font-weight:500; }
+  .vs-row div:first-child{ border-right:3px solid var(--ink); background:#fdffe9; }
+  .vs-row div:last-child{ color:#666; }
   .quote h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(25px,6vw,56px); line-height:1.14; max-width:900px; overflow-wrap:break-word; }
   .quote h2 .x{ background:var(--pink); box-shadow:0 0 0 3px var(--pink); }
   .quote p{ font-size:19px; color:var(--mut); max-width:640px; margin-top:26px; font-weight:500; }
@@ -320,7 +330,7 @@
 </section>
 
 <div class="wrap rv">
-  <div class="stats-kick">// First month, one building</div>
+  <div class="stats-kick">// Emunah Manor, month one</div>
   <div class="stats">
     <div class="stat press"><b>273</b><span>leads worked</span></div>
     <div class="stat press"><b>760+</b><span>messages sent by the AI</span></div>
@@ -328,6 +338,28 @@
     <div class="stat press"><b>&lt;1 min</b><span>first reply, natural cadence</span></div>
   </div>
 </div>
+
+<section class="vs-sec wrap">
+  <div class="rv">
+    <div class="kick">// head to head</div>
+    <h2 class="sechead">Us vs the per-door <span class="hlm">platforms.</span></h2>
+  </div>
+  <div class="vs rv">
+    <div class="vs-head"><div>Leasing Engine</div><div>Per-door platforms</div></div>
+    <div class="vs-label">How you pay</div>
+    <div class="vs-row"><div>A commission when a unit fills. No lease, no bill.</div><div>Per door, per month, lease or no lease.</div></div>
+    <div class="vs-label">Minimums</div>
+    <div class="vs-row"><div>None.</div><div>Monthly minimums in the four figures.</div></div>
+    <div class="vs-label">Live in</div>
+    <div class="vs-row"><div>A day or two.</div><div>Weeks of onboarding.</div></div>
+    <div class="vs-label">Your PMS</div>
+    <div class="vs-row"><div>Any PMS: lead emails, CSV, or our API. Native syncs starting with Rent Manager.</div><div>The big PMSs only. Rent Manager is not on the list.</div></div>
+    <div class="vs-label">Who owns your account</div>
+    <div class="vs-row"><div>A named account manager, on WhatsApp or a weekly call.</div><div>A ticket queue.</div></div>
+    <div class="vs-label">"Is this a bot?"</div>
+    <div class="vs-row"><div>An honest answer, then it keeps helping.</div><div>A dodge.</div></div>
+  </div>
+</section>
 
 <section id="how" class="how wrap">
   <div class="rv">
@@ -388,6 +420,7 @@
   <h2 class="sechead" style="margin-bottom:36px">No fine print</h2>
   <details><summary>What does it cost?</summary><p>A commission per move-in, agreed up front. There is no per-door fee or monthly minimum. If we do not fill units, you do not pay.</p></details>
   <details><summary>What channels does it use?</summary><p>Both text and email. Text carries most conversations because that is what renters answer, and email replies land inside the renter's Zillow thread. Voice is on the roadmap.</p></details>
+  <details><summary>Does it work with my property management software?</summary><p>Any PMS, from day one: point your listing-site lead emails at us, hand us a CSV, or push leads through our API. Native two-way syncs are rolling out starting with Rent Manager, the one the big platforms skip.</p></details>
   <details><summary>Which lead sources does it catch?</summary><p>Zillow, Apartments.com, and whatever ILS you list on. New sources take about a day to add.</p></details>
   <details><summary>What about my data?</summary><p>Each building's data is isolated, verified by automated tests, and backed up nightly off-site.</p></details>
   <details><summary>How long does onboarding take?</summary><p>A day or two. One kickoff call with your team and we are live. Your second building goes even faster.</p></details>
