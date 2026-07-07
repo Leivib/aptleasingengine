@@ -82,7 +82,7 @@
   @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
   .hero-phone{ width:330px; margin:0 auto; height:560px; display:flex; flex-direction:column; overflow:hidden; }
-  .hero-phone #demo-feed{ flex:1 1 auto; min-height:0; overflow:hidden; overflow-anchor:none; }
+  .hero-phone #demo-feed{ flex:1 1 auto; min-height:0; overflow-y:auto; scrollbar-width:none; overflow-anchor:none; }
   .hero-phone #demo-feed::-webkit-scrollbar{ display:none; }
   .demo{ padding:100px 24px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
   .demo .phone{ min-height:560px; }
@@ -356,8 +356,8 @@
     <div class="vs-row"><div>A day or two.</div><div>Weeks of onboarding.</div></div>
     <div class="vs-label">Who owns your account</div>
     <div class="vs-row"><div>A named account manager, on WhatsApp or a weekly call.</div><div>A ticket queue.</div></div>
-    <div class="vs-label">"Is this a bot?"</div>
-    <div class="vs-row"><div>An honest answer, then it keeps helping.</div><div>A dodge.</div></div>
+    <div class="vs-label">Follow-up</div>
+    <div class="vs-row"><div>Nudges until they book, apply, or say stop. It does not give up on live leads.</div><div>A short sequence, then silence.</div></div>
   </div>
 </section>
 
@@ -369,7 +369,7 @@
   </div>
   <div class="how-grid rv">
     <div class="step press"><span class="k">01</span><b>Catches every lead</b><p>Zillow, Apartments.com, and your ILS platform. First reply within a minute, even at 9pm on a Saturday.</p></div>
-    <div class="step press"><span class="k">02</span><b>Talks like a person</b><p>By text and email, even inside the Zillow thread, in whatever language the lead writes. Every answer comes from your building's facts, and it is honest when asked if it is a bot.</p></div>
+    <div class="step press"><span class="k">02</span><b>Talks like a person</b><p>By text and email, even inside the Zillow thread, in whatever language the lead writes. Every answer comes from your building's facts.</p></div>
     <div class="step press"><span class="k">03</span><b>Works every tour</b><p>Books on your calendar and sends every reminder. What happens after depends on who actually showed.</p></div>
     <div class="step press"><span class="k">04</span><b>Proves every move-in</b><p>A guest card per lead with the real conversation and a trail ending in "lease signed."</p></div>
   </div>
@@ -411,7 +411,7 @@
 <section class="band rv">
   <h2>Done with you, not dumped on you.</h2>
   <p>A real account manager sets the engine up on your facts, then stays in it: a weekly call or a shared WhatsApp group, whichever fits how you work.</p>
-  <p style="margin-top:14px">Built by people who spent over a decade leasing apartments in the field, across every asset class from A to C. That is why it behaves like a leasing agent and never like a generic bot.</p>
+  <p style="margin-top:14px">Built by people who spent over a decade leasing apartments in the field, across every asset class from A to C. That is why it behaves like a leasing agent.</p>
   <div class="ops">★ Built by a team that leases its own buildings</div>
 </section>
 
@@ -456,8 +456,8 @@
     {k:'t',x:'TUESDAY 9:42 PM'},
     {k:'them',x:'Hi, is the 2 bed still available?'},
     {k:'us',x:'It is! When are you hoping to move, and what monthly budget are you working with?'},
-    {k:'them',x:'sept 1, around $1,700. also is this a real person lol'},
-    {k:'us',x:'I am the AI leasing assistant here at Emunah Manor, and I can really get you moved in. The 2 bed is $1,699, so Sept 1 at your budget works.'},
+    {k:'them',x:'sept 1, around $1,700'},
+    {k:'us',x:'Perfect. The 2 bed is $1,699, so Sept 1 at your budget works. Want to see it?'},
     {k:'them',x:'ok nice. can i see it first?'},
     {k:'us',h:'Of course. Here is a video walkthrough of that exact unit: <u style="font-weight:700">Watch the video tour →</u>'},
     {k:'them',x:'just watched, love the kitchen. can I come tomorrow at 5?'},
@@ -489,7 +489,7 @@
   }
   if(reduced){ S.forEach(function(s){ feed.appendChild(el(s)); }); return; }
   var i=0, typing=null;
-  function put(n){ feed.appendChild(n); feed.scrollTop=feed.scrollHeight; }
+  function put(n){ var atEnd = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 90; feed.appendChild(n); if(atEnd) feed.scrollTop=feed.scrollHeight; }
   function typeBubble(){ var t=document.createElement('div'); t.className='typing'; t.innerHTML='<i></i><i></i><i></i>'; put(t); return t; }
   function step(){
     if(i>=S.length){ setTimeout(function(){ feed.innerHTML=''; i=0; setTimeout(step,1100); },6500); return; }
