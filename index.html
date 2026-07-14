@@ -1,505 +1,487 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leasing Engine · Your new AI leasing agent, paid only on move-ins</title>
-<meta name="description" content="The AI leasing agent for apartment owners. It answers every lead by text and email in under a minute, and you pay only when a unit fills.">
-<meta property="og:title" content="Leasing Engine">
-<meta property="og:description" content="You pay when the unit fills. No lease, no bill.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leasing Engine. Your new AI leasing agent.</title>
+<meta name="description" content="The AI leasing agent for apartments. It answers every renter in under a minute, books the tour, and works it to a signed lease. You pay only when someone moves in.">
+<link rel="canonical" href="https://aptleasingengine.com">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23C9F73E'/%3E%3Crect x='6' y='6' width='88' height='88' fill='none' stroke='%230F0F0F' stroke-width='7'/%3E%3Ctext x='50' y='72' font-size='58' text-anchor='middle' fill='%230F0F0F' font-family='Arial Black,Arial' font-weight='900'%3EL%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta property="og:site_name" content="Leasing Engine">
+<meta property="og:title" content="Leasing Engine. Your new AI leasing agent.">
+<meta property="og:description" content="Answers every renter in under a minute, books the tour, and works it to a signed lease. You pay only when someone moves in.">
+<meta property="og:url" content="https://aptleasingengine.com">
+<meta property="og:image" content="https://aptleasingengine.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Leasing Engine. Your new AI leasing agent.">
+<meta name="twitter:description" content="Answers every renter in under a minute, books the tour, and works it to a signed lease. You pay only when someone moves in.">
+<meta name="twitter:image" content="https://aptleasingengine.com/og.png">
 <style>
-  :root{ --paper:#FFFCF2; --ink:#0F0F0F; --lime:#C9F73E; --yell:#FFD84D; --pink:#FF90E8; --mut:#565656; }
-  *{ box-sizing:border-box; margin:0; min-width:0; }
-  html{ scroll-behavior:smooth; overflow-x:hidden; }
-  img,svg,table{ max-width:100%; }
-  body{ font-family:"Space Grotesk",system-ui,sans-serif; background:var(--paper); background-image:radial-gradient(rgba(15,15,15,.03) 1.5px, transparent 1.5px); background-size:30px 30px; color:var(--ink); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
-  .hlm{ background:var(--lime); padding:.02em .14em; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
-  .kick{ font-family:"IBM Plex Mono",monospace; font-size:13px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:18px; }
-  ::selection{ background:var(--lime); }
-  .wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
-  a{ color:inherit; }
-  .shout{ font-family:"Archivo Black",Arial,sans-serif; text-transform:uppercase; line-height:.96; letter-spacing:-0.01em; }
-  .mono{ font-family:"IBM Plex Mono",monospace; }
-
-  .rv{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; }
-  .rv.on{ opacity:1; transform:none; }
-  @media (prefers-reduced-motion: reduce){ .rv{ opacity:1; transform:none; transition:none; } .tick-in{ animation:none !important; } }
-
-  .box{ border:3px solid var(--ink); box-shadow:7px 7px 0 var(--ink); background:#fff; }
-  .press{ transition:transform .12s, box-shadow .12s; }
-  .press:hover{ transform:translate(4px,4px); box-shadow:3px 3px 0 var(--ink); }
-
-  nav{ position:sticky; top:0; background:var(--paper); border-bottom:3px solid var(--ink); z-index:50; }
-  .nav-in{ display:flex; align-items:center; justify-content:space-between; height:66px; }
-  .logo{ font-family:"Archivo Black",sans-serif; font-size:17px; text-transform:uppercase; text-decoration:none; display:flex; align-items:center; gap:10px; }
-  .logo i{ width:28px; height:28px; background:var(--lime); border:3px solid var(--ink); font-style:normal; display:flex; align-items:center; justify-content:center; font-size:15px; }
-  .nav-r{ display:flex; gap:26px; align-items:center; }
-  .nav-r a{ text-decoration:none; font-size:14.5px; font-weight:500; }
-  .nav-r a:not(.btn):hover{ background:var(--yell); }
-  .btn{ display:inline-block; background:var(--ink); color:var(--paper) !important; text-decoration:none; padding:13px 26px; font-weight:700; font-size:15px; border:3px solid var(--ink); box-shadow:5px 5px 0 rgba(15,15,15,.28); transition:transform .12s, box-shadow .12s; }
-  .btn:hover{ transform:translate(3px,3px); box-shadow:1px 1px 0 rgba(15,15,15,.28); }
-  .btn.lime{ background:var(--lime); color:var(--ink) !important; box-shadow:5px 5px 0 var(--ink); }
-  .btn.lime:hover{ box-shadow:1px 1px 0 var(--ink); }
-
-  .hero{ padding-top:78px; padding-bottom:70px; display:grid; grid-template-columns:1.08fr .92fr; gap:56px; align-items:center; }
-  .stamp{ display:inline-block; background:var(--pink); border:3px solid var(--ink); padding:6px 14px; font-weight:700; font-size:13.5px; text-transform:uppercase; letter-spacing:.04em; transform:rotate(-2deg); margin-bottom:26px; box-shadow:4px 4px 0 var(--ink); }
-  h1{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(34px,9vw,84px); line-height:1.06; letter-spacing:-0.01em; overflow-wrap:break-word; }
-  h1 .hl{ background:var(--lime); padding:.02em .1em; margin-left:-.04em; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
-  .hero .sub{ font-size:19px; color:var(--mut); margin:26px 0 32px; max-width:470px; font-weight:500; }
-  .hero .conf{ font-weight:700; font-size:17.5px; margin:-8px 0 26px; }
-  .hero .cta{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
-
-  .card-wrap{ position:relative; }
-  .btn .ar{ display:inline-block; margin-left:8px; transition:transform .12s; }
-  .btn:hover .ar{ transform:translateX(5px); }
-  .badge{ position:absolute; top:-20px; right:-12px; z-index:2; background:var(--yell); border:3px solid var(--ink); padding:9px 14px; font-family:"Archivo Black",sans-serif; font-size:13px; text-transform:uppercase;  box-shadow:3px 3px 0 var(--ink); }
-  .card{ background:#fff; border:3px solid var(--ink); box-shadow:10px 10px 0 var(--ink); }
-  .card .head{ padding:14px 16px; display:flex; align-items:center; gap:12px; border-bottom:3px solid var(--ink); }
-  .avatar{ width:38px; height:38px; background:var(--lime); border:3px solid var(--ink); font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; }
-  .card .head b{ display:block; font-size:15px; }
-  .card .head span{ font-size:12px; color:var(--mut); }
-  .strip{ display:flex; align-items:center; padding:14px 16px; border-bottom:3px solid var(--ink); background:var(--paper); }
-  .dot{ text-align:center; }
-  .dot i{ display:block; width:12px; height:12px; background:var(--ink); margin:0 auto 5px; }
-  .dot b{ font-size:10px; font-weight:700; text-transform:uppercase; }
-  .bar{ height:3px; flex:1; background:var(--ink); margin:0 6px 15px; }
-  .trail{ padding:12px 16px; }
-  .trail div{ display:flex; gap:10px; font-size:13.5px; padding:5px 0; font-weight:500; }
-  .trail i{ width:8px; height:8px; background:var(--lime); border:2px solid var(--ink); margin-top:6px; flex:none; }
-  .trail span{ color:var(--mut); margin-left:auto; white-space:nowrap; font-size:11.5px; font-family:"IBM Plex Mono",monospace; }
-  .comm{ display:flex; justify-content:space-between; align-items:center; background:var(--lime); border-top:3px solid var(--ink); padding:13px 16px; font-size:13.5px; font-weight:700; }
-  .comm b{ font-family:"Archivo Black",sans-serif; font-size:19px; }
-
-  .ticker{ border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); background:var(--lime); color:var(--ink); overflow:hidden; }
-  .tick-in{ display:flex; width:max-content; animation:tick 34s linear infinite; }
-  .tick-in span{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:15px; padding:13px 0; white-space:nowrap; }
-  .tick-in span::after{ content:"★"; color:var(--ink); margin:0 22px; }
-  @keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
-
-  .hero-phone{ width:330px; margin:0 auto; height:560px; display:flex; flex-direction:column; overflow:hidden; }
-  .hero-phone #demo-feed{ flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; overflow-anchor:none; }
-  .hero-phone #demo-feed::-webkit-scrollbar{ display:none; }
-  .demo{ padding:100px 24px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
-  .demo .phone{ min-height:560px; }
-  #demo-feed .msg{ animation:msgin .28s ease; }
-  @keyframes msgin{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
-  .typing{ display:inline-flex; gap:5px; padding:12px 14px; background:#efefec; border:3px solid var(--ink); border-bottom-left-radius:4px; border-radius:16px 16px 16px 4px; margin-bottom:9px; }
-  .typing i{ width:7px; height:7px; border-radius:50%; background:var(--ink); opacity:.35; animation:blink 1s infinite; }
-  .typing i:nth-child(2){ animation-delay:.18s; } .typing i:nth-child(3){ animation-delay:.36s; }
-  @keyframes blink{ 0%,80%{ opacity:.25; } 40%{ opacity:.9; } }
-  .stampline{ text-align:center; margin:12px 0; }
-  .stampline b{ display:inline-block; border:3px solid var(--ink); padding:8px 16px; font-family:"Archivo Black",sans-serif; font-size:14px; text-transform:uppercase; box-shadow:4px 4px 0 var(--ink); transform:rotate(-2deg); animation:slam .3s cubic-bezier(.2,2,.4,1); }
-  @keyframes slam{ from{ opacity:0; transform:rotate(-2deg) scale(1.7); } to{ opacity:1; transform:rotate(-2deg) scale(1); } }
-  .st-yell{ background:var(--yell); } .st-pink{ background:var(--pink); } .st-lime{ background:var(--lime); }
-  @media (prefers-reduced-motion: reduce){ #demo-feed .msg,.stampline b{ animation:none; } }
-  .quote{ padding:110px 24px 100px; }
-  .vs-sec{ padding-bottom:110px; }
-  .vs{ margin-top:40px; border:3px solid var(--ink); background:#fff; box-shadow:7px 7px 0 var(--ink); }
-  .vs-head{ display:grid; grid-template-columns:1fr 1fr; border-bottom:3px solid var(--ink); }
-  .vs-head div{ padding:13px 16px; font-family:"Archivo Black",Arial,sans-serif; text-transform:uppercase; font-size:14px; }
-  .vs-head div:first-child{ background:var(--lime); border-right:3px solid var(--ink); }
-  .vs-label{ padding:9px 16px 3px; font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:#666; border-top:2px solid var(--ink); }
-  .vs-row{ display:grid; grid-template-columns:1fr 1fr; }
-  .vs-row div{ padding:6px 16px 14px; font-size:14.5px; font-weight:500; }
-  .vs-row div:first-child{ border-right:3px solid var(--ink); background:#fdffe9; }
-  .vs-row div:last-child{ color:#666; }
-  .quote h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(25px,6vw,56px); line-height:1.14; max-width:900px; overflow-wrap:break-word; }
-  .quote h2 .x{ background:var(--pink); padding:.02em .1em; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
-  .quote p{ font-size:19px; color:var(--mut); max-width:640px; margin-top:26px; font-weight:500; }
-
-  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; padding-bottom:110px; }
-  .stat{ border:3px solid var(--ink); padding:26px 22px; box-shadow:7px 7px 0 var(--ink); }
-  .stat b{ font-family:"Archivo Black",sans-serif; font-size:40px; display:block; line-height:1; margin-bottom:8px; }
-  .stat span{ font-size:14px; font-weight:500; }
-  .stat:nth-child(1){ background:var(--lime); }
-  .stat:nth-child(2){ background:#fff; }
-  .stat:nth-child(3){ background:var(--yell); }
-  .stat:nth-child(4){ background:#fff; }
-  .stats-kick{ font-family:"IBM Plex Mono",monospace; font-size:13px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:20px; }
-
-  .sechead{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(24px,5.4vw,46px); line-height:1.14; overflow-wrap:break-word; }
-  .seclead{ font-size:18px; color:var(--mut); margin-top:16px; max-width:560px; font-weight:500; }
-
-  .how{ padding-bottom:110px; }
-  .how-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; margin-top:44px; }
-  .step{ border:3px solid var(--ink); background:#fff; padding:26px; box-shadow:7px 7px 0 var(--ink); position:relative; }
-  .step .k{ font-family:"Archivo Black",sans-serif; font-size:44px; color:var(--paper); -webkit-text-stroke:2px var(--ink); position:absolute; top:14px; right:18px; }
-  .step b{ display:block; font-size:19px; margin-bottom:8px; font-weight:700; }
-  .step p{ font-size:15px; color:var(--mut); max-width:88%; }
-
-  .tour-sec{ padding:100px 0 110px; border-top:3px solid var(--ink); background:#fff; }
-  .tour{ display:block; max-width:720px; }
-  .tour ul{ list-style:none; padding:0; margin-top:30px; }
-  .tour li{ font-size:16.5px; padding:12px 0; border-bottom:3px solid var(--ink); font-weight:500; display:flex; gap:12px; }
-  .tour li::before{ content:"→"; font-weight:700; }
-  .tour li:last-child{ border:none; }
-  .tour li span{ color:var(--mut); font-weight:400; }
-  .phone{ width:330px; margin:0 auto; background:var(--paper); border:3px solid var(--ink); box-shadow:10px 10px 0 var(--ink); padding:16px 14px 20px; }
-  .phone .ph-head{ text-align:center; font-size:12px; color:var(--mut); padding-bottom:12px; border-bottom:3px solid var(--ink); margin-bottom:12px; font-family:"IBM Plex Mono",monospace; }
-  .phone .ph-head b{ display:block; color:var(--ink); font-size:14px; font-family:"Space Grotesk",sans-serif; }
-  .msg{ max-width:86%; padding:10px 13px; font-size:13.5px; line-height:1.45; margin-bottom:9px; border:3px solid var(--ink); font-weight:500; }
-  .msg.us{ background:var(--lime); margin-left:auto; box-shadow:4px 4px 0 var(--ink); }
-  .msg.them{ background:#fff; box-shadow:-4px 4px 0 var(--ink); }
-  .msg-t{ text-align:center; font-size:10.5px; color:var(--mut); margin:10px 0 6px; font-family:"IBM Plex Mono",monospace; }
-
-  .guard{ padding:100px 0 110px; border-top:3px solid var(--ink); }
-  .guard-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; margin-top:44px; }
-  .g-item{ border:3px solid var(--ink); background:#fff; padding:24px 26px; box-shadow:7px 7px 0 var(--pink); }
-  .g-item b{ display:block; font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:16px; margin-bottom:10px; }
-  .g-item b::before{ content:""; display:inline-block; width:12px; height:12px; background:var(--lime); border:2px solid var(--ink); margin-right:10px; }
-  .g-item p{ font-size:15px; color:var(--mut); }
-
-  .band{ background:var(--yell); border-bottom:3px solid var(--ink); padding:96px 24px; text-align:center; }
-  .band h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(24px,5.2vw,50px); line-height:1.1; margin-bottom:20px; overflow-wrap:break-word; }
-  .band p{ font-size:18px; max-width:620px; margin:0 auto; font-weight:500; }
-  .band .ops{ display:inline-block; margin-top:30px; background:#fff; border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink); padding:10px 18px; font-weight:700; font-size:14.5px; transform:rotate(-1.5deg); }
-
-  .faq{ padding:100px 24px 110px; max-width:808px; margin:0 auto; }
-  .faq .sechead{ margin-bottom:36px; }
-  details{ border:3px solid var(--ink); background:#fff; margin-bottom:14px; box-shadow:6px 6px 0 var(--ink); }
-  summary{ font-weight:700; font-size:17px; cursor:pointer; list-style:none; display:flex; justify-content:space-between; gap:16px; padding:17px 20px; }
-  summary::-webkit-details-marker{ display:none; }
-  summary::after{ content:"+"; font-family:"Archivo Black",sans-serif; }
-  details[open] summary::after{ content:"–"; }
-  details[open] summary{ border-bottom:3px solid var(--ink); background:var(--lime); }
-  details p{ padding:16px 20px; font-size:15.5px; color:var(--mut); font-weight:500; }
-
-  .final{ background:var(--lime); border-top:3px solid var(--ink); text-align:center; padding:110px 24px 96px; }
-  .final h2{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(30px,7vw,72px); line-height:1.04; margin-bottom:20px; overflow-wrap:break-word; }
-  .final p{ font-size:18px; max-width:520px; margin:0 auto 38px; font-weight:500; }
-  .final .fine{ margin-top:24px; font-size:14px; font-weight:500; }
-
-  footer{ border-top:3px solid var(--ink); background:var(--paper); overflow:hidden; }
-  .foot-shout{ font-family:"Archivo Black",sans-serif; text-transform:uppercase; font-size:clamp(52px,9.6vw,124px); line-height:.95; letter-spacing:-0.01em; color:transparent; -webkit-text-stroke:2px var(--ink); white-space:nowrap; padding-top:34px; }
-  .foot-in{ padding:22px 0 26px; display:flex; justify-content:space-between; font-size:14px; font-weight:500; flex-wrap:wrap; gap:10px; }
-
-  @media (max-width:900px){
-    .hero{ grid-template-columns:1fr; padding-top:44px; padding-bottom:56px; gap:40px; }
-    .guard-grid{ grid-template-columns:1fr; }
-    .tour{ grid-template-columns:1fr; gap:44px; }
-    .demo{ grid-template-columns:1fr; gap:40px; padding:70px 24px; }
-    .nav-r a:not(.btn){ display:none; }
-    .card-wrap{ transform:none; }
-    .badge{ right:2px; top:-16px; font-size:11px; padding:7px 11px; }
-    .card{ box-shadow:6px 6px 0 var(--ink); }
-    .quote{ padding:70px 24px 64px; }
-    .stats{ padding-bottom:80px; }
-    .how,.guard,.faq{ padding-bottom:80px; }
-    .tour-sec,.band,.final{ padding-top:80px; padding-bottom:80px; }
-    .foot-shout{ font-size:clamp(44px,16vw,90px); }
+  :root{
+    --cream:#F7F4E7; --ink:#111112; --lime:#C7F145; --pink:#FF86E4; --gold:#F8C63D; --grid:#E7E3D2; --mut:#5f5e55;
+    --inkmut:#9a9aa2; --line:#2a2a2e;
+    --disp:"Arial Black","Helvetica Neue",Arial,system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   }
-  @media (max-width:560px){
-    .wrap{ padding:0 22px; }
-    .faq{ padding-left:22px; padding-right:22px; }
-    body{ font-size:15px; }
-    .kick{ font-size:11px; margin-bottom:12px; }
-    section,.how,.guard,.faq,.tour-sec,.band,.final,.quote,.demo{ padding-top:52px; padding-bottom:52px; }
-    .quote{ padding-left:22px; padding-right:22px; }
-    .btn{ padding:11px 12px; font-size:13.5px; border-width:2px; }
-    .hero{ padding-top:34px; padding-bottom:48px; gap:32px; }
-    .stamp{ font-size:11px; padding:5px 10px; margin-bottom:16px; border-width:2px; box-shadow:3px 3px 0 var(--ink); }
-    .hero .sub{ font-size:15px; margin:15px 0 20px; }
-    .hero .conf{ font-size:15px; margin:-4px 0 18px; }
-    .hero .cta{ gap:10px; }
-    .hero .cta .btn{ flex:1 1 0; text-align:center; padding:12px 8px; }
-    .card,.diff,.g-item,details,.stat,.step,.phone{ border-width:2px; }
-    .card{ box-shadow:6px 6px 0 var(--ink); }
-    .card .head{ padding:10px 15px; gap:10px; }
-    .avatar{ width:30px; height:30px; font-size:11px; border-width:2px; }
-    .strip{ padding:10px 14px; }
-    .dot i{ width:9px; height:9px; }
-    .dot b{ font-size:8.5px; }
-    .trail{ padding:8px 15px; }
-    .trail div{ font-size:12px; padding:4px 0; gap:8px; }
-    .trail i{ width:7px; height:7px; margin-top:5px; }
-    .trail span{ font-size:9.5px; }
-    .comm{ padding:11px 15px; font-size:12px; }
-    .comm b{ font-size:15px; }
-    .badge{ font-size:10px; padding:6px 9px; right:0; top:-14px; border-width:2px; box-shadow:3px 3px 0 var(--ink); }
-    .tick-in span{ font-size:12px; padding:10px 0; }
-    .quote h2{ font-size:24px; }
-    .quote p{ font-size:14.5px; margin-top:14px; }
-    .stats{ grid-template-columns:1fr 1fr; gap:10px; padding-bottom:52px; }
-    .stat{ padding:12px 15px; box-shadow:4px 4px 0 var(--ink); }
-    .stat b{ font-size:24px; }
-    .stat span{ font-size:11.5px; }
-    .sechead{ font-size:22px; }
-    .seclead{ font-size:14px; margin-top:10px; }
-    .how-grid{ grid-template-columns:1fr 1fr; gap:10px; margin-top:26px; }
-    .step{ padding:12px 14px; box-shadow:4px 4px 0 var(--ink); }
-    .step .k{ font-size:20px; top:9px; right:10px; }
-    .step b{ font-size:13px; margin:0 0 5px; padding-right:26px; }
-    .step p{ font-size:12.5px; max-width:100%; }
-    .tour{ grid-template-columns:1fr; gap:32px; }
-    .tour li{ font-size:13.5px; display:block; padding:9px 0 9px 22px; position:relative; }
-    .tour li::before{ position:absolute; left:0; top:9px; }
-    .tour li span{ display:block; font-size:12px; margin-top:1px; }
-    .phone{ width:100%; box-shadow:6px 6px 0 var(--ink); padding:12px 13px 16px; }
-    .msg{ font-size:12.5px; padding:8px 13px; border-width:2px; }
-    .guard-grid{ grid-template-columns:1fr; gap:10px; margin-top:24px; }
-    .g-item{ padding:15px 17px; box-shadow:4px 4px 0 var(--pink); }
-    .g-item b{ font-size:13.5px; margin-bottom:6px; }
-    .g-item b::before{ width:9px; height:9px; margin-right:7px; }
-    .g-item p{ font-size:13px; line-height:1.55; }
-    .band h2{ font-size:21px; margin-bottom:12px; }
-    .band p{ font-size:14px; }
-    .band .ops{ font-size:11.5px; padding:8px 11px; border-width:2px; box-shadow:3px 3px 0 var(--ink); }
-    details{ margin-bottom:10px; box-shadow:4px 4px 0 var(--ink); }
-    summary{ font-size:14px; padding:13px 17px; }
-    details p{ font-size:13.5px; padding:12px 17px; }
-    .final h2{ font-size:26px; }
-    .final p{ font-size:14px; margin-bottom:22px; }
-    .final .btn{ width:100%; }
-    .final .fine{ font-size:12px; }
-    .foot-shout{ font-size:18.5vw; -webkit-text-stroke:1.5px var(--ink); padding-top:20px; white-space:normal; text-align:center; line-height:.92; }
-    .foot-in{ flex-direction:column; align-items:center; text-align:center; font-size:12px; }
-    .demo{ grid-template-columns:1fr; gap:30px; padding-left:22px; padding-right:22px; }
-    .hero-phone{ width:100%; height:430px; }
-    .demo .phone{ min-height:340px; }
-  }
-  </style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);font-family:var(--disp);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  section{border-bottom:3px solid var(--ink)}
+  .eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .eyebrow .n{color:var(--ink);font-weight:700}
+  .eyebrow .s{color:var(--lime);-webkit-text-stroke:.4px var(--ink)}
+  a{color:inherit}
+
+  /* header */
+  header{position:sticky;top:0;z-index:40;border-bottom:3px solid var(--ink);background:var(--cream)}
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;max-width:760px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:11px}
+  .logo{width:38px;height:38px;display:grid;place-items:center;background:var(--lime);border:3px solid var(--ink);
+    font-weight:900;font-size:22px;box-shadow:4px 4px 0 var(--ink)}
+  .wordmark{font-weight:900;font-size:19px;letter-spacing:-.02em;text-transform:uppercase;line-height:1}
+  .wordmark small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--mut);font-weight:400;margin-top:3px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:900;text-transform:uppercase;letter-spacing:-.01em;
+    border:3px solid var(--ink);padding:11px 18px;text-decoration:none;font-size:15px;box-shadow:5px 5px 0 var(--ink);
+    transition:transform .08s ease, box-shadow .08s ease;cursor:pointer;background:var(--cream)}
+  .btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+  .btn.dark{background:var(--ink);color:var(--cream)}
+  .btn.lime{background:var(--lime);color:var(--ink)}
+  .btn.sm{padding:9px 14px;font-size:13px;box-shadow:4px 4px 0 var(--ink)}
+  .btn.ghost{background:transparent}
+  .btn.on-ink{border-color:var(--cream);box-shadow:5px 5px 0 rgba(199,241,69,.35)}
+
+  /* hero */
+  .hero{background:var(--cream);background-image:radial-gradient(var(--grid) 1.5px,transparent 1.5px);background-size:26px 26px;padding:34px 0 44px}
+  .badge{display:inline-block;background:var(--pink);border:2.5px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+    font-weight:800;font-size:13px;letter-spacing:.02em;text-transform:uppercase;padding:8px 15px;transform:rotate(-2.5deg)}
+  h1{font-weight:900;font-size:clamp(38px,10.5vw,56px);line-height:1.06;letter-spacing:-.035em;text-transform:uppercase;text-wrap:balance;margin:22px 0 0}
+  h1 .hl{background:var(--lime);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:.02em .1em}
+  .lede{font-size:clamp(16px,4.2vw,19px);font-weight:600;line-height:1.45;margin:20px 0 8px;max-width:36ch}
+  .confident{font-size:clamp(15px,4vw,18px);font-weight:800;line-height:1.42;margin:14px 0 24px}
+  .confident .hl{background:var(--lime);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:.02em .12em}
+  .actions{display:flex;flex-wrap:wrap;gap:14px}
+
+  /* generic section head */
+  .sec{padding:40px 0}
+  .sec.ink{background:var(--ink);color:var(--cream)}
+  .sec h2{font-weight:900;font-size:clamp(26px,6.6vw,38px);line-height:1.16;letter-spacing:-.03em;margin:14px 0 0;text-wrap:balance}
+  .sec h2 .b{background:var(--lime);color:var(--ink);padding:.02em .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .sec p.body{font-size:clamp(15px,3.9vw,17px);font-weight:500;line-height:1.55;margin:18px 0 0;color:inherit}
+  .sec.ink p.body{color:#d9d7cc}
+  .sec.gold{background:var(--gold);color:var(--ink)}
+  .sec.gold p.body{color:#241f0c}
+  .sec.gold .eyebrow{color:#6b6224}
+  .claimchip{display:inline-flex;align-items:center;gap:10px;background:#fff;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);
+    padding:12px 18px;font-weight:800;font-size:15px;letter-spacing:-.01em;margin-top:28px;transform:rotate(-1.4deg)}
+  .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-top:24px;color:var(--mut)}
+  .sec.ink .kicker{color:var(--lime)}
+  .kicker .c{color:var(--pink)}
+
+  /* SEE IT WORK demo */
+  .demo{margin-top:26px}
+  .toggle{display:inline-flex;border:3px solid var(--cream);border-radius:2px;overflow:hidden;margin-bottom:18px}
+  .toggle button{font-family:var(--disp);font-weight:800;font-size:14px;padding:9px 16px;background:transparent;color:var(--cream);border:0;cursor:pointer;text-transform:uppercase;letter-spacing:-.01em}
+  .toggle button[aria-selected="true"]{background:var(--lime);color:var(--ink)}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:0 0 auto;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    padding:9px 13px;background:transparent;color:var(--inkmut);border:1px solid var(--line);cursor:pointer;white-space:nowrap}
+  .tabs button[aria-selected="true"]{background:var(--lime);color:var(--ink);border-color:var(--lime);font-weight:700}
+
+  .stage{border:1px solid var(--line);background:#0c0c0f;padding:18px 14px 8px;min-height:520px}
+  /* phone */
+  .phone{max-width:340px;margin:0 auto;background:#fff;border-radius:30px;border:3px solid #000;box-shadow:0 0 0 6px #17171b;overflow:hidden}
+  .ph-top{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 0 10px;border-bottom:1px solid #eee;background:#fafafa}
+  .ph-av{width:44px;height:44px;border-radius:50%;background:var(--lime);border:1px solid #cbe46a;display:grid;place-items:center;font-weight:900;color:#111;font-size:15px}
+  .ph-nm{font-family:-apple-system,system-ui,sans-serif;font-size:13px;color:#111;font-weight:600}
+  .ph-nm span{color:#8a8a8a}
+  .thread{padding:14px 12px 16px;min-height:360px;display:flex;flex-direction:column;gap:7px;font-family:-apple-system,system-ui,Segoe UI,Roboto,sans-serif}
+  .row{display:flex;flex-direction:column;animation:pop .28s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .bub{max-width:80%;padding:9px 13px;border-radius:19px;font-size:14.5px;line-height:1.32;color:#fff;word-wrap:break-word}
+  .lead .bub{align-self:flex-start;background:#e6e6eb;color:#111;border-bottom-left-radius:6px}
+  .us .bub{align-self:flex-end;background:#22c55e;border-bottom-right-radius:6px}
+  .mgr .bub{align-self:flex-end;background:#2f6fed;border-bottom-right-radius:6px}
+  .us,.mgr{align-items:flex-end}
+  .lead{align-items:flex-start}
+  .mgr .who{font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#2f6fed;text-transform:uppercase;margin:0 4px 2px 0;align-self:flex-end}
+  .bub a,.bub .lnk{color:#fff;text-decoration:underline;font-weight:600}
+  .lead .bub a,.lead .bub .lnk{color:#111}
+  .sys{align-self:center;display:flex;align-items:center;gap:7px;font-family:-apple-system,system-ui,sans-serif;font-size:11.5px;color:#8a8a8a;font-weight:600;margin:5px 0;text-align:center}
+  .sys::before{content:"";width:7px;height:7px;border-radius:50%;background:#3b82f6;flex:0 0 auto}
+  .gap{align-self:center;font-family:-apple-system,system-ui,sans-serif;font-size:11.5px;color:#b0b0b0;margin:3px 0}
+  .day{align-self:center;font-family:-apple-system,system-ui,sans-serif;font-size:11px;color:#9a9a9a;font-weight:700;margin:6px 0 2px}
+  .chip{align-self:center;display:inline-flex;align-items:center;gap:6px;font-family:-apple-system,system-ui,sans-serif;font-size:12px;font-weight:700;margin:7px 0 2px}
+  .chip::before{content:"";width:8px;height:8px;border-radius:50%}
+  .chip.good{color:#16a34a}.chip.good::before{background:#16a34a}
+  .chip.human{color:#2f6fed}.chip.human::before{background:#2f6fed}
+  .typing .bub{background:#e6e6eb;color:#111;padding:11px 14px}
+  .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#9a9a9a;margin:0 1.5px;animation:blink 1.2s infinite}
+  .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+
+  .stagefoot{max-width:340px;margin:14px auto 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .fig{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--inkmut);line-height:1.4}
+  .replay{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--lime);background:transparent;border:1px solid var(--line);padding:7px 12px;cursor:pointer}
+  .replay:active{transform:translateY(1px)}
+
+  /* dashboard mock (toggle view) */
+  .dash{max-width:360px;margin:0 auto;background:var(--cream);color:var(--ink);border:3px solid #000;box-shadow:8px 8px 0 rgba(199,241,69,.5)}
+  .dash-url{display:flex;align-items:center;gap:8px;background:#1b1b1f;padding:10px 12px}
+  .dash-url .dots{display:flex;gap:5px}.dash-url .dots i{width:9px;height:9px;border-radius:50%;background:#4a4a4f;display:block}
+  .dash-url .u{font-family:var(--mono);font-size:11px;color:#b7b7bd;letter-spacing:.02em}
+  .dash-body{padding:16px 15px}
+  .dash-hd{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .dash-hd .lm{display:flex;align-items:center;gap:10px}
+  .dash-hd .sq{width:34px;height:34px;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-weight:900}
+  .dash-hd .tt{font-weight:900;font-size:15px;text-transform:uppercase;letter-spacing:-.01em;line-height:1}
+  .dash-hd .tt small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--mut);font-weight:400;margin-top:3px}
+  .live{font-family:var(--mono);font-size:11px;font-weight:700;border:2px solid var(--ink);padding:5px 9px;display:flex;align-items:center;gap:6px}
+  .live::before{content:"";width:8px;height:8px;border-radius:50%;background:#22c55e}
+  .dash-sub{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--mut);margin:16px 0 8px}
+  .today{background:var(--lime);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:14px 15px}
+  .today li{list-style:none;display:flex;gap:9px;align-items:baseline;padding:5px 0;font-size:14.5px;font-weight:600}
+  .today li b{font-weight:900}
+  .today li::before{content:"\2605";color:var(--ink);font-size:12px}
+  .today .next{border-top:2px solid var(--ink);margin-top:10px;padding-top:11px;font-weight:800;font-size:14px}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .kpi{border:2px solid var(--ink);padding:11px 12px}
+  .kpi.fill{background:var(--lime)}
+  .kpi .k{font-weight:900;font-size:26px;line-height:1}
+  .kpi .kl{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-top:5px}
+
+  /* receipts */
+  .receipts{max-width:520px;margin:26px auto 0;border-top:1px solid var(--line)}
+  .receipts li{list-style:none;display:flex;gap:12px;align-items:flex-start;padding:14px 2px;border-bottom:1px solid var(--line);font-size:15px;font-weight:500;color:#d9d7cc}
+  .receipts li .ar{color:var(--lime);font-weight:900;flex:0 0 auto}
+
+  /* how you pay guest card */
+  .gcard{max-width:420px;margin:24px auto 0;border:3px solid var(--ink);background:#fff;box-shadow:9px 9px 0 var(--ink)}
+  .gc-hd{display:flex;align-items:center;gap:12px;padding:15px 16px;border-bottom:3px solid var(--ink)}
+  .gc-hd .sq{width:40px;height:40px;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-weight:900;font-size:15px}
+  .gc-hd .nm{font-weight:900;font-size:17px}
+  .gc-hd .mt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--mut);text-transform:uppercase;margin-top:3px}
+  .track{display:flex;align-items:center;gap:6px;padding:15px 16px;background:#f3f2ea;border-bottom:3px solid var(--ink)}
+  .track .st{display:flex;flex-direction:column;align-items:center;gap:7px;flex:0 0 auto}
+  .track .st i{width:13px;height:13px;border-radius:50%;background:var(--ink);display:block}
+  .track .st span{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+  .track .ln{flex:1;height:2px;background:var(--ink);opacity:.35}
+  .steps li{list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:11px 16px;border-bottom:1px solid #eee;font-size:14.5px;font-weight:600}
+  .steps li .tm{font-family:var(--mono);font-size:11px;color:var(--mut);white-space:nowrap}
+  .steps li .dt{display:flex;gap:9px;align-items:baseline}
+  .steps li .dt::before{content:"";width:11px;height:11px;background:var(--lime);border:1.5px solid var(--ink);flex:0 0 auto;position:relative;top:2px}
+  .leased{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:var(--cream);padding:13px 16px}
+  .leased .l{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--inkmut)}
+  .leased .r{font-weight:900;color:var(--lime);letter-spacing:.02em}
+  .payline{font-family:var(--mono);font-size:clamp(15px,4.4vw,19px);letter-spacing:.06em;margin-top:26px;font-weight:700}
+  .payline .c{color:var(--pink)}
+
+  /* setup steps */
+  .threeup{display:grid;grid-template-columns:1fr;gap:0;margin-top:26px;border-top:3px solid var(--ink)}
+  .step{border-bottom:3px solid var(--ink);padding:20px 0}
+  .step .no{font-family:var(--mono);font-weight:700;color:var(--pink);font-size:14px}
+  .step h3{font-weight:900;font-size:22px;letter-spacing:-.02em;margin:8px 0 8px;text-transform:uppercase}
+  .step p{font-size:16px;font-weight:500;line-height:1.45;color:var(--mut)}
+  @media(min-width:640px){.threeup{grid-template-columns:1fr 1fr 1fr}.step{border-right:3px solid var(--ink);padding:20px 18px}.step:last-child{border-right:0}}
+
+  /* faq */
+  .faq{margin-top:24px;border-top:3px solid var(--ink)}
+  details{border-bottom:3px solid var(--ink)}
+  summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 2px;font-weight:900;font-size:clamp(17px,4.6vw,20px);letter-spacing:-.01em}
+  summary::-webkit-details-marker{display:none}
+  summary .pm{font-family:var(--mono);font-weight:700;color:var(--pink);font-size:22px;flex:0 0 auto}
+  details[open] summary .pm{color:var(--ink)}
+  details p{padding:0 2px 20px;font-size:16px;font-weight:500;line-height:1.5;color:var(--mut);max-width:60ch}
+
+  /* who built + get started */
+  .story .body{max-width:52ch}
+  .final{background:var(--ink);color:var(--cream)}
+  .final h2 .b{background:var(--lime)}
+  .bignums{display:grid;grid-template-columns:1fr;border-top:1px solid var(--line);margin-top:8px}
+  .bignum{padding:22px 0;border-bottom:1px solid var(--line)}
+  .bignum .n{font-weight:900;font-size:clamp(38px,11vw,52px);line-height:1;letter-spacing:-.03em}
+  .bignum .l{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--inkmut);margin-top:8px}
+  @media(min-width:640px){.bignums{grid-template-columns:1fr 1fr 1fr}.bignum{border-right:1px solid var(--line);padding:22px 16px}.bignum:last-child{border-right:0}}
+
+  footer{background:var(--cream);padding:26px 0 30px}
+  .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center}
+  .foot .fm{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);line-height:1.7}
+  .foot .fm .c{color:var(--pink)}
+</style>
 </head>
 <body>
-
-<nav><div class="wrap nav-in">
-  <a class="logo" href="#"><i>L</i>Leasing Engine</a>
-  <div class="nav-r">
-    <a href="#how">How it works</a>
-    <a href="#tour">The tour engine</a>
-    <a href="#faq">FAQ</a>
-    <a class="btn" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ14nvP9xATyprjaFbsQAD5ghv43QimahKNEPkORUKn1svKNs54VwQLRJGqtZ_KtZEJ0ZHYyeoaY" target="_blank" rel="noopener">Get a demo</a>
-  </div>
-</div></nav>
-
-<header class="wrap hero">
-  <div>
-    <div class="stamp">No lease, no bill</div>
-    <div class="kick" style="margin-bottom:16px">The AI leasing agent built by actual leasing agents</div>
-    <h1>Meet your new <span class="hl">leasing agent.</span></h1>
-    <p class="sub">The first AI leasing agent that wants your units filled as badly as you do. It answers every lead in under a minute, by text and email, in any language, even inside the Zillow thread, then works it all the way to a signed lease.</p>
-    <p class="conf">And we are so confident it fills units: <span class="hlm">you only pay when one does.</span></p>
-    <div class="cta">
-      <a class="btn lime" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ14nvP9xATyprjaFbsQAD5ghv43QimahKNEPkORUKn1svKNs54VwQLRJGqtZ_KtZEJ0ZHYyeoaY" target="_blank" rel="noopener">Get a demo<span class="ar">→</span></a>
-      <a class="btn" href="#tour">See how it works<span class="ar">→</span></a>
-    </div>
-  </div>
-  <div class="phone hero-phone">
-    <div class="ph-head"><b>Emunah Manor</b>text message</div>
-    <div id="demo-feed"></div>
-  </div>
-</header>
-
-
-
-<section id="demo" class="demo wrap">
-  <div class="rv">
-    <div class="kick">// the receipt</div>
-    <h2 class="sechead">Every lead becomes a <span class="hlm">guest card.</span></h2>
-    <p class="seclead">The full trail with a timestamp on every step, ending in a signed lease. When we bill you, this card is the invoice.</p>
-  </div>
-  <div class="card-wrap rv">
-  
-    <div class="badge">Billed off this card</div>
-    <div class="card">
-      <div class="head"><div class="avatar">MR</div><div><b>Maya R.</b><span>Guest card</span></div></div>
-      <div class="strip">
-        <div class="dot"><i></i><b>Came in</b></div><div class="bar"></div>
-        <div class="dot"><i></i><b>Toured</b></div><div class="bar"></div>
-        <div class="dot"><i></i><b>Applied</b></div><div class="bar"></div>
-        <div class="dot"><i></i><b>Leased</b></div>
+  <header>
+    <div class="bar">
+      <div class="brand">
+        <div class="logo">L</div>
+        <div class="wordmark">Leasing Engine<small>The AI leasing agent</small></div>
       </div>
-      <div class="trail">
-        <div><i></i>Lead came in, we texted in 1 min<span>Jun 22 18:47</span></div>
-        <div><i></i>Tour booked and confirmed<span>Jun 26 09:02</span></div>
-        <div><i></i>Showed up and toured<span>Jun 26 11:08</span></div>
-        <div><i></i>Applied<span>Jun 27 15:15</span></div>
-        <div><i></i>Lease signed<span>Jul 01 12:30</span></div>
+      <a class="btn dark sm" href="https://calendar.app.google/UiVqCB346VBzBXdU6" target="_blank" rel="noopener">Get a demo</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="badge">No lease, no bill</span>
+      <h1>Meet your new <span class="hl">leasing agent.</span></h1>
+      <p class="lede">It texts every new lead back in under a minute, by text or email, in any language, books the tour, and keeps pushing until they sign.</p>
+      <p class="confident">And we only get paid when a unit does: <span class="hl">you pay when someone moves in.</span></p>
+      <div class="actions">
+        <a class="btn lime" href="https://calendar.app.google/UiVqCB346VBzBXdU6" target="_blank" rel="noopener">Get a demo &rarr;</a>
+        <a class="btn ghost" href="#see">See it work &rarr;</a>
       </div>
-      <div class="comm"><span>Move-in confirmed</span><b>Leased ✓</b></div>
     </div>
-  
-  </div>
-</section>
+  </section>
 
-<section class="quote wrap rv">
-  <h2>Every other bot charges per door, every month, <span class="x">lease or no lease.</span></h2>
-  <p>We charge a commission when a lead we worked signs. And we bill against a timestamped card, not a message-count report.</p>
-</section>
-
-<div class="wrap rv">
-  <div class="stats-kick">// Emunah Manor, month one</div>
-  <div class="stats">
-    <div class="stat press"><b>273</b><span>leads worked</span></div>
-    <div class="stat press"><b>760+</b><span>messages sent by the AI</span></div>
-    <div class="stat press"><b>13</b><span>move-ins placed</span></div>
-    <div class="stat press"><b>&lt;1 min</b><span>first reply, natural cadence</span></div>
-  </div>
-</div>
-
-<section class="vs-sec wrap">
-  <div class="rv">
-    <div class="kick">// head to head</div>
-    <h2 class="sechead">Us vs the per-door <span class="hlm">platforms.</span></h2>
-  </div>
-  <div class="vs rv">
-    <div class="vs-head"><div>Leasing Engine</div><div>Per-door platforms</div></div>
-    <div class="vs-label">How you pay</div>
-    <div class="vs-row"><div>A commission when a unit fills. No lease, no bill.</div><div>Per door, per month, lease or no lease.</div></div>
-    <div class="vs-label">Minimums</div>
-    <div class="vs-row"><div>None.</div><div>Monthly minimums in the four figures.</div></div>
-    <div class="vs-label">Live in</div>
-    <div class="vs-row"><div>A day or two.</div><div>Weeks of onboarding.</div></div>
-    <div class="vs-label">Who owns your account</div>
-    <div class="vs-row"><div>A named account manager, on WhatsApp or a weekly call.</div><div>A ticket queue.</div></div>
-    <div class="vs-label">Follow-up</div>
-    <div class="vs-row"><div>Nudges until they book, apply, or say stop. It does not give up on live leads.</div><div>A short sequence, then silence.</div></div>
-  </div>
-</section>
-
-<section id="how" class="how wrap">
-  <div class="rv">
-    <div class="kick">// the funnel</div>
-    <h2 class="sechead">From inquiry to keys</h2>
-    <p class="seclead">The whole funnel, worked by one engine, with a stamp on every step.</p>
-  </div>
-  <div class="how-grid rv">
-    <div class="step press"><span class="k">01</span><b>Catches every lead</b><p>Zillow, Apartments.com, and your ILS platform. First reply within a minute, even at 9pm on a Saturday.</p></div>
-    <div class="step press"><span class="k">02</span><b>Talks like a person</b><p>By text and email, even inside the Zillow thread, in whatever language the lead writes. Every answer comes from your building's facts.</p></div>
-    <div class="step press"><span class="k">03</span><b>Works every tour</b><p>Books on your calendar and sends every reminder. What happens after depends on who actually showed.</p></div>
-    <div class="step press"><span class="k">04</span><b>Proves every move-in</b><p>A guest card per lead with the real conversation and a trail ending in "lease signed."</p></div>
-  </div>
-</section>
-
-<section id="tour" class="tour-sec">
-  <div class="wrap tour">
-  <div class="rv">
-    <div class="kick">// the tour engine</div>
-    <h2 class="sechead">A booked tour is worth nothing if nobody shows.</h2>
-    <p class="seclead">Seven automatic touches around every tour. Each fires exactly once, inside legal texting hours. One reply and it stops.</p>
-    <ul>
-      <li>Day-before and morning-of reminders</li>
-      <li>Arrival directions an hour out</li>
-      <li>"How did it go" <span>only if they actually toured</span></li>
-      <li>No-shows get a rebook nudge <span>instead of a guilt trip</span></li>
-      <li>Gentle check-ins until they apply <span>then it goes quiet</span></li>
-    </ul>
-  </div>
+  <!-- PROBLEM -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="eyebrow"><span class="n">01</span> <span class="s">//</span> The problem</div>
+      <h2>A lead comes in at 8pm. Your office is closed.</h2>
+      <p class="body">She messages three other buildings, tours the one that answered, and signs on Sunday. You never had a chance, and you never even saw her name.</p>
+      <div class="kicker">What is missing <span class="c">:</span> not a faster chatbot. A closer that never sleeps.</div>
     </div>
-</section>
+  </section>
 
-<section class="guard">
-  <div class="wrap">
-    <div class="rv">
-      <div class="kick">// the rules</div>
-      <h2 class="sechead">Boring on purpose, <span class="hlm">where it counts.</span></h2>
-      <p class="seclead">The rules the engine will not break, in writing.</p>
+  <!-- SEE IT WORK -->
+  <section class="sec ink" id="see">
+    <div class="wrap">
+      <div class="eyebrow"><span class="n">02</span> <span class="s">//</span> See it work</div>
+      <h2>Watch it close a lead. Then read the <span class="b">receipts.</span></h2>
+      <p class="body">Getting somebody from "is this still available" to a signed lease takes a dozen messages, a video, a tour, two reminders, and a nudge on the application. Pick a scenario and watch it run.</p>
+
+      <div class="demo">
+        <div id="conv">
+          <div class="tabs" role="tablist" aria-label="Scenario">
+            <button data-sc="books" role="tab" aria-selected="true">Books the tour</button>
+            <button data-sc="hard" role="tab" aria-selected="false">Asks something hard</button>
+            <button data-sc="never" role="tab" aria-selected="false">Never books</button>
+            <button data-sc="quiet" role="tab" aria-selected="false">Goes quiet after touring</button>
+          </div>
+
+          <div class="stage">
+            <div class="phone">
+              <div class="ph-top">
+                <div class="ph-av" id="ph-av">MR</div>
+                <div class="ph-nm" id="ph-nm">Maya R. <span>&rsaquo;</span></div>
+              </div>
+              <div class="thread" id="thread"></div>
+            </div>
+          </div>
+          <div class="stagefoot">
+            <div class="fig" id="fig">Fig. 01 &middot; she booked, toured, and signed in 9 days</div>
+            <button class="replay" id="replay">&#9654; Replay</button>
+          </div>
+        </div>
+
+        <ul class="receipts">
+          <li><span class="ar">&rarr;</span> Asks the budget and move-in date before quoting a single unit</li>
+          <li><span class="ar">&rarr;</span> Sends the video of that exact apartment, not a brochure</li>
+          <li><span class="ar">&rarr;</span> Says the income and credit rules out loud, so nobody wastes a Saturday</li>
+          <li><span class="ar">&rarr;</span> Hands off to a real person the second it is out of its depth</li>
+        </ul>
+      </div>
     </div>
-    <div class="guard-grid rv">
-      <div class="g-item"><b>It never invents</b><p>Every promise it makes is real and every rent it quotes is one you approved. It never sends the same line twice, and when it cannot answer, it hands off to a person with the whole conversation attached.</p></div>
-      <div class="g-item"><b>It texts legally</b><p>Consent recorded, STOP and HELP honored on every thread, first message carries an opt-out, and sends stay inside a Monday to Saturday, 9 to 5 window.</p></div>
-      <div class="g-item"><b>Your data is walled off</b><p>Each building's data is isolated, and the isolation is verified by automated tests on every change.</p></div>
-      <div class="g-item"><b>Nothing gets lost</b><p>Every conversation and every stamp is backed up nightly, off-site. The proof survives anything.</p></div>
+  </section>
+
+  <!-- HOW YOU PAY -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="eyebrow"><span class="n">03</span> <span class="s">//</span> How you pay</div>
+      <h2>Your invoice is the <span class="b">proof.</span></h2>
+      <p class="body">Every lead becomes a guest card: the real conversation, a timestamp on every step, ending in a signed lease. That card is what we bill against. Not a message count, not an engagement report. A lease, a date, and a resident holding keys.</p>
+
+      <div class="gcard">
+        <div class="gc-hd"><div class="sq">MR</div><div><div class="nm">Maya R.</div><div class="mt">Guest card &middot; 2BR &middot; Sept 1</div></div></div>
+        <div class="track">
+          <div class="st"><i></i><span>Came in</span></div><div class="ln"></div>
+          <div class="st"><i></i><span>Toured</span></div><div class="ln"></div>
+          <div class="st"><i></i><span>Applied</span></div><div class="ln"></div>
+          <div class="st"><i></i><span>Leased</span></div>
+        </div>
+        <div class="leased"><span class="l">Came in Jun 22 &middot; leased Jul 01</span><span class="r">Leased &#10003;</span></div>
+      </div>
+
+      <div class="payline">No per-door fee. No monthly minimum. <span class="c">No lease : no bill.</span></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="band rv">
-  <h2>Done with you, not dumped on you.</h2>
-  <p>A real account manager sets the engine up on your facts, then stays in it: a weekly call or a shared WhatsApp group, whichever fits how you work.</p>
-  <p style="margin-top:14px">Built by people who spent over a decade leasing apartments in the field, across every asset class from A to C. That is why it behaves like a leasing agent.</p>
-  <div class="ops">★ Built by a team that leases its own buildings</div>
-</section>
+  <!-- SETUP -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="eyebrow"><span class="n">04</span> <span class="s">//</span> Setup</div>
+      <h2>AI is daunting. <span class="b">You do not have to touch any of it.</span></h2>
+      <p class="body">Nobody got into this business to configure software. We set the whole thing up on your buildings, your rents, your rules, then hand you one dashboard. You go back to leasing. No IT project, no integration, no prompt writing. If you can forward an email, you are done.</p>
+      <div class="threeup">
+        <div class="step"><div class="no">01</div><h3>You forward your leads</h3><p>Point your Zillow and Apartments.com lead emails at us. One forwarding rule, five minutes.</p></div>
+        <div class="step"><div class="no">02</div><h3>We build it around you</h3><p>We load your units, rents, criteria, and tour calendar, and write the rules the AI follows. You approve every fact before it says a word to a renter.</p></div>
+        <div class="step"><div class="no">03</div><h3>You get the dashboard</h3><p>A day or two later you log in and it is already working. Every lead, every text, every tour, on one screen.</p></div>
+      </div>
+      <div class="kicker">Live in 1 to 2 days <span class="c">&middot;</span> nothing to install <span class="c">&middot;</span> nothing to learn</div>
+    </div>
+  </section>
 
-<section id="faq" class="faq">
-  <div class="kick">// straight answers</div>
-  <h2 class="sechead" style="margin-bottom:36px">No fine print</h2>
-  <details><summary>What does it cost?</summary><p>A commission per move-in, agreed up front. There is no per-door fee or monthly minimum. If we do not fill units, you do not pay.</p></details>
-  <details><summary>What channels does it use?</summary><p>Both text and email. Text carries most conversations because that is what renters answer, and email replies land inside the renter's Zillow thread. It replies in the lead's language, Spanish included. Voice is on the roadmap.</p></details>
-  <details><summary>Does it work with my property management software?</summary><p>Any PMS, from day one: point your listing-site lead emails at us, hand us a CSV, or push leads through our API. Native two-way syncs are rolling out starting with Rent Manager, the one the big platforms skip.</p></details>
-  <details><summary>Which lead sources does it catch?</summary><p>Zillow, Apartments.com, and whatever ILS you list on. New sources take about a day to add.</p></details>
-  <details><summary>What about my data?</summary><p>Each building's data is isolated, verified by automated tests, and backed up nightly off-site.</p></details>
-  <details><summary>How long does onboarding take?</summary><p>A day or two. One kickoff call with your team and we are live. Your second building goes even faster.</p></details>
-  <details><summary>Does it replace my onsite team?</summary><p>No. It runs the lead queue and the tour calendar so your team can run the building. Anything needing judgment goes to a person, with the whole conversation attached.</p></details>
-</section>
+  <!-- STRAIGHT ANSWERS -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="eyebrow"><span class="n">05</span> <span class="s">//</span> Straight answers</div>
+      <h2>No fine print.</h2>
+      <div class="faq">
+        <details open><summary>What does it cost? <span class="pm">&minus;</span></summary><p>A commission for each person who moves in, agreed before we start. No per-door fee, no monthly minimum, no setup cost. If we do not fill units, you do not pay us.</p></details>
+        <details><summary>Does it work with my property management software? <span class="pm">+</span></summary><p>It runs alongside it. Leads come to us by email, tours land on your calendar, and the signed lease and resident live in whatever system you already use. Nothing to rip out.</p></details>
+        <details><summary>Is the texting legal? <span class="pm">+</span></summary><p>Yes. Every lead we text has reached out to you first, every message carries an opt-out, and a STOP is honored instantly and permanently. That is built in, not an afterthought.</p></details>
+        <details><summary>How long does setup take? <span class="pm">+</span></summary><p>One kickoff call, then one to two days. We do the loading and the rules. You approve the facts, and it goes live.</p></details>
+        <details><summary>Does it replace my leasing team? <span class="pm">+</span></summary><p>No. It answers the 8pm text your team cannot, books the tour, and hands a warm, qualified renter to a real person. Your team does the tour and closes. It stops the leads that were dying in the inbox.</p></details>
+      </div>
+    </div>
+  </section>
 
-<div class="final">
-  <div class="stamp" style="background:#fff">15 minutes flat</div>
-  <h2>See a live guest card.</h2>
-  <p>Fifteen minutes with the live dashboard and the real conversations behind every move-in.</p>
-  <a class="btn" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ14nvP9xATyprjaFbsQAD5ghv43QimahKNEPkORUKn1svKNs54VwQLRJGqtZ_KtZEJ0ZHYyeoaY" target="_blank" rel="noopener">Get a demo<span class="ar">→</span></a>
-  <div class="fine">Live in a day or two. Your second building goes even faster.</div>
-</div>
+  <!-- DONE WITH YOU -->
+  <section class="sec gold">
+    <div class="wrap">
+      <div class="eyebrow"><span class="n">06</span> <span class="s">//</span> Always on your side</div>
+      <h2>Done with you, not dumped on you.</h2>
+      <p class="body">A real account manager sets the engine up on your facts, then stays in it. A weekly call or a shared WhatsApp group, whichever fits how you work. You are never handed a login and left alone.</p>
+      <p class="body">Built by people who spent over a decade leasing apartments in the field, across every asset class from A to C. That is why it behaves like a leasing agent, not a chatbot.</p>
+      <div class="claimchip"><span>&#9733;</span> Built by a team that leases its own buildings</div>
+    </div>
+  </section>
 
-<footer>
-  <div class="wrap"><div class="foot-shout">Leasing Engine</div></div>
-  <div class="wrap foot-in">
-    <div>© Leasing Engine <span class="mono" style="font-size:10px;letter-spacing:.05em;color:#999">· BUILD JUL 7, 9:40 PM</span></div>
-    <div><a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ14nvP9xATyprjaFbsQAD5ghv43QimahKNEPkORUKn1svKNs54VwQLRJGqtZ_KtZEJ0ZHYyeoaY" target="_blank" rel="noopener">Book a demo</a></div>
-  </div>
-</footer>
+  <!-- GET STARTED -->
+  <section class="sec final" id="start">
+    <div class="wrap">
+      <div class="eyebrow"><span class="n">07</span> <span class="s">//</span> Get started</div>
+      <h2>Bring us your <span class="b">worst</span> lead source.</h2>
+      <p class="body">Pick the building with the coldest inbox and the slowest response time, and we will open the live dashboard on it. You pay nothing until somebody moves in, so there is nothing to lose but the eight minutes.</p>
+      <div class="actions" style="margin-top:24px">
+        <a class="btn lime" href="https://calendar.app.google/UiVqCB346VBzBXdU6" target="_blank" rel="noopener">Book 8 minutes &rarr;</a>
+        <a class="btn ghost on-ink" style="color:var(--cream)" href="#see">See it work &rarr;</a>
+      </div>
+      <div class="bignums">
+        <div class="bignum"><div class="n">8 min</div><div class="l">Live dashboard, no slide deck</div></div>
+        <div class="bignum"><div class="n">1 to 2 days</div><div class="l">From kickoff call to live</div></div>
+        <div class="bignum"><div class="n">$0</div><div class="l">Until a unit fills</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot">
+      <div class="brand"><div class="logo">L</div><div class="wordmark">Leasing Engine<small>The AI leasing agent</small></div></div>
+      <div class="fm">&copy; 2026 Leasing Engine <span class="c">&middot;</span> No lease, no bill<br>Answered <span class="c">&middot;</span> Toured <span class="c">&middot;</span> Leased</div>
+    </div>
+  </footer>
 
 <script>
 (function(){
-  var els=document.querySelectorAll('.rv');
-  if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('on');}); return; }
-  var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } }); },{threshold:.1});
-  els.forEach(function(e){ io.observe(e); });
-})();
-(function(){
-  var feed=document.getElementById('demo-feed'); if(!feed) return;
-  var S=[
-    {k:'t',x:'TUESDAY 9:42 PM'},
-    {k:'them',x:'Hi, is the 2 bed still available?'},
-    {k:'us',x:'It is! When are you hoping to move, and what monthly budget are you working with?'},
-    {k:'them',x:'sept 1, around $1,700'},
-    {k:'us',x:'Perfect. The 2 bed is $1,699, so Sept 1 at your budget works. Want to see it?'},
-    {k:'them',x:'ok nice. can i see it first?'},
-    {k:'us',h:'Of course. Here is a video walkthrough of that exact unit: <u style="font-weight:700">Watch the video tour →</u>'},
-    {k:'them',x:'just watched, love the kitchen. can I come tomorrow at 5?'},
-    {k:'us',h:'Tomorrow at 5 is open. Lock it in here: <u style="font-weight:700">Book your tour →</u>'},
-    {k:'stamp',x:'Tour booked',c:'st-yell'},
-    {k:'us',x:'You are all set! Quick heads up so there are no surprises: we ask for 3x the rent in income, 550+ credit, and no prior notices to quit. If that works, you are good to go.'},
-    {k:'them',x:'all good on my end'},
-    {k:'t',x:'WEDNESDAY 9:02 AM'},
-    {k:'us',x:'Reminder your tour is TODAY at 5. Bring a photo ID!'},
-    {k:'t',x:'5:38 PM'},
-    {k:'them',x:'Just toured, loved it!!'},
-    {k:'us',h:'Amazing. The application takes about 10 minutes: <u style="font-weight:700">Apply now →</u>'},
-    {k:'stamp',x:'Applied',c:'st-pink'},
-    {k:'t',x:'THURSDAY 11:20 AM'},
-    {k:'us',x:'Good news, you are approved! Sending the lease over now.'},
-    {k:'them',x:'Just signed!!'},
-    {k:'stamp',x:'Lease signed',c:'st-lime'},
-    {k:'us',x:'Welcome home, Maya. Keys are ready Saturday at 10.'},
-    {k:'t',x:'// EVERY STEP ABOVE IS TIMESTAMPED ON YOUR GUEST CARD'},
-    {k:'stamp',x:'Billed off the card',c:'st-lime'}
-  ];
-  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function el(s){
-    var d=document.createElement('div');
-    if(s.k==='t'){ d.className='msg-t'; d.textContent=s.x; }
-    else if(s.k==='stamp'){ d.className='stampline'; var b=document.createElement('b'); b.className=s.c; b.textContent=s.x; d.appendChild(b); }
-    else{ d.className='msg '+(s.k==='us'?'us':'them'); if(s.h){ d.innerHTML=s.h; } else { d.textContent=s.x; } }
-    return d;
+  var link = function(t){ return '<span class="lnk">'+t+' &rarr;</span>'; };
+  var SC = {
+    books: { av:'MR', nm:'Maya R.', fig:'Fig. 01 &middot; she booked, toured, and signed in 9 days', steps:[
+      {who:'day', text:'Tuesday 4:42 PM'},
+      {who:'lead', html:'Hi, is the 2 bed still available?'},
+      {who:'us', html:'It is. When are you hoping to move, and what monthly budget are you working with?'},
+      {who:'lead', html:'sept 1, around $1,700'},
+      {who:'us', html:'That works. The 2 bed is $1,699 and it opens Sept 1. Want to see it?'},
+      {who:'lead', html:'can i see it first?'},
+      {who:'us', html:'Of course. Here is a walkthrough of that exact unit: '+link('Watch the video tour')},
+      {who:'lead', html:'just watched, love the kitchen. can I come tomorrow at 5?'},
+      {who:'us', html:'Tomorrow at 5 is open. Lock it in here: '+link('Book your tour')},
+      {who:'chip', kind:'good', text:'Tour booked'}
+    ]},
+    hard: { av:'RB', nm:'Rachel B.', fig:'Fig. 02 &middot; a hard question, answered by a real person in minutes', steps:[
+      {who:'day', text:'Thursday 11:06 AM'},
+      {who:'lead', html:'hi im looking at the 2 bed. whats the actual square footage? and is the boiler original? my last building had lead paint and i have a toddler'},
+      {who:'us', html:'Those are exactly the right questions to ask, and I am not going to guess at them.'},
+      {who:'us', html:'Let me bring in Leivi. He manages the building and has the real specs and the lead disclosure. Give me two minutes.'},
+      {who:'sys', text:'Handed to a human'},
+      {who:'mgr', who2:'Leivi &middot; Building manager', html:'Hi, this is Leivi. The 2 bed is 940 sq ft. The boiler was replaced in 2021, and I can send you the lead paint disclosure and the last inspection before you even come see it. Want me to email those over?'},
+      {who:'lead', html:'yes please. thats a relief honestly'},
+      {who:'mgr', who2:'Leivi &middot; Building manager', html:'Sending now. Any other questions, ask me directly.'},
+      {who:'us', html:'Leivi sent those over. Now that the important stuff is settled, would you like to come see it? I have Saturday at 11 or Sunday at 2.'},
+      {who:'chip', kind:'human', text:'Real specs, real docs, warm handoff'}
+    ]},
+    never: { av:'DR', nm:'Danielle R.', fig:'Fig. 03 &middot; no reply for a day, then a nudge that booked the tour', steps:[
+      {who:'lead', html:'is the 1 bed still open?'},
+      {who:'us', html:'It is, $1,395, available Aug 1. When are you looking to move?'},
+      {who:'lead', html:'aug 1 works'},
+      {who:'us', html:'Great. Here is the video of that exact unit: '+link('Watch the video tour')+' Want to come see it this week?'},
+      {who:'gap', text:'No reply for 24 hours'},
+      {who:'sys', text:'Rule fired: no tour booked in 24h'},
+      {who:'day', text:'Tuesday 3:20 PM'},
+      {who:'us', html:'Hi Danielle, still thinking about the 1 bed? I have Thursday at 5:30 or Saturday at 11. Which is easier?'},
+      {who:'lead', html:'sorry! work has been insane. saturday'},
+      {who:'chip', kind:'good', text:'Tour booked'}
+    ]},
+    quiet: { av:'NK', nm:'Nathan K.', fig:'Fig. 04 &middot; toured, then silence. It closed the lease four days later', steps:[
+      {who:'day', text:'Wednesday 4:55 PM'},
+      {who:'lead', html:'just finished the tour, its nice'},
+      {who:'us', html:'Glad you liked it. Anything about the unit giving you pause?'},
+      {who:'gap', text:'No reply'},
+      {who:'sys', text:'Rule fired: toured, no application in 48h'},
+      {who:'day', text:'Friday 4:55 PM'},
+      {who:'us', html:'Hi Nathan, the 2 bed you saw Wednesday is still open. Anything holding you up? The application is ten minutes: '+link('Apply now')},
+      {who:'lead', html:'honestly the rent is a little above what i wanted'},
+      {who:'us', html:'That is fair, and I would rather know now. The same layout on the second floor is $1,565. Same kitchen, one flight up. Want me to hold it?'},
+      {who:'lead', html:'wait really? yes'},
+      {who:'us', html:'Holding it for 24 hours. Here you go: '+link('Apply now')},
+      {who:'chip', kind:'good', text:'Held for 24 hours'}
+    ]}
+  };
+
+  var thread = document.getElementById('thread');
+  var phAv = document.getElementById('ph-av'), phNm = document.getElementById('ph-nm'), figEl = document.getElementById('fig');
+  var timers = [], current = 'books';
+
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+  function add(cls, html){ var d=document.createElement('div'); d.className=cls; d.innerHTML=html; thread.appendChild(d); thread.scrollTop=thread.scrollHeight; return d; }
+
+  function play(key){
+    clearTimers(); thread.innerHTML=''; current=key;
+    var sc = SC[key];
+    phAv.textContent = sc.av; phNm.innerHTML = sc.nm + ' <span>&rsaquo;</span>'; figEl.innerHTML = sc.fig;
+    var t = 250;
+    sc.steps.forEach(function(step){
+      var isBubble = (step.who==='lead'||step.who==='us'||step.who==='mgr');
+      if (isBubble && step.who!=='lead'){
+        timers.push(setTimeout(function(){
+          add('row '+step.who+' typing', '<div class="bub"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>');
+        }, t));
+        t += 750;
+        timers.push(setTimeout(function(){
+          var last = thread.querySelector('.typing'); if(last) last.remove();
+          var who = step.who==='mgr' ? '<div class="who">'+(step.who2||'')+'</div>' : '';
+          add('row '+step.who, who+'<div class="bub">'+step.html+'</div>');
+        }, t));
+        t += 520;
+      } else if (isBubble){
+        timers.push(setTimeout(function(){ add('row lead', '<div class="bub">'+step.html+'</div>'); }, t));
+        t += 700;
+      } else {
+        var cls = step.who==='sys'?'sys':(step.who==='gap'?'gap':(step.who==='day'?'day':'chip '+(step.kind||'good')));
+        timers.push(setTimeout(function(){ add(cls, step.text); }, t));
+        t += (step.who==='gap'||step.who==='sys') ? 640 : 460;
+      }
+    });
   }
-  if(reduced){ S.forEach(function(s){ feed.appendChild(el(s)); }); return; }
-  var i=0, typing=null;
-  function put(n){ var atEnd = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 90; feed.appendChild(n); if(atEnd) feed.scrollTop=feed.scrollHeight; }
-  function typeBubble(){ var t=document.createElement('div'); t.className='typing'; t.innerHTML='<i></i><i></i><i></i>'; put(t); return t; }
-  function step(){
-    if(i>=S.length){ setTimeout(function(){ feed.innerHTML=''; i=0; setTimeout(step,1100); },6500); return; }
-    var s=S[i++];
-    if(s.k==='us'){ typing=typeBubble(); setTimeout(function(){ typing.remove(); put(el(s)); setTimeout(step,2100); },1450); }
-    else{ put(el(s)); setTimeout(step, s.k==='t'?1000:(s.k==='stamp'?2400:1950)); }
-  }
-  var seen=false;
-  var io2=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting&&!seen){ seen=true; setTimeout(step,500); io2.unobserve(feed); } }); },{threshold:.35});
-  io2.observe(feed);
+
+  var tabWrap = document.querySelector('.tabs');
+  tabWrap.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-sc]'); if(!b) return;
+    tabWrap.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-selected', x===b?'true':'false'); });
+    play(b.getAttribute('data-sc'));
+  });
+  document.getElementById('replay').addEventListener('click', function(){ play(current); });
+
+
+  var started=false;
+  var io = new IntersectionObserver(function(ents){
+    ents.forEach(function(en){ if(en.isIntersecting && !started){ started=true; play('books'); } });
+  }, {threshold:0.25});
+  io.observe(document.querySelector('#see .stage'));
 })();
 </script>
 </body>
